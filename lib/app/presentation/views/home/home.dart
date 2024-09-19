@@ -1,9 +1,9 @@
 // lib/app/views/home_view.dart
-import 'package:comunidad_delmor/app/controllers/home_controller.dart';
-import 'package:comunidad_delmor/app/views/global_widgets/custom_drawer.dart';
+import 'package:comunidad_delmor/app/presentation/global_widgets/custom_drawer_controller/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart';
+import '../../routes/app_pages.dart';
+import 'home_controller.dart';
 
 class HomeView extends StatelessWidget {
   final HomeController controller = Get.put(HomeController());
@@ -12,7 +12,8 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
       drawer: CustomDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

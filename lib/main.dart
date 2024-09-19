@@ -1,6 +1,4 @@
-import 'package:comunidad_delmor/app/views/home/home.dart';
-import 'package:comunidad_delmor/routes/app_pages.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:comunidad_delmor/app/presentation/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

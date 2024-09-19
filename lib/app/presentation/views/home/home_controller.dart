@@ -1,4 +1,4 @@
-import 'package:comunidad_delmor/app/models/counter_model.dart';
+import 'package:comunidad_delmor/app/data/models/counter_model.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -11,6 +11,8 @@ class HomeController extends GetxController {
   }
 
   void decrement() {
+    print("valor: ${counter.valor}");
+    if(counter.valor != 0)
     _counter.value = CounterModel(counter.valor - 1);
   }
 
