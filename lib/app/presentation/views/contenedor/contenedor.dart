@@ -2,7 +2,6 @@ import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios.
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../routes/app_pages.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer.dart';
@@ -12,7 +11,7 @@ import '../../global_widgets/custom_drawer_controller/custom_drawer_controller.d
 final _bodyContent = [Perfil(), Cumpleanios()];
 
 class Contenedor extends StatelessWidget {
-  Contenedor({super.key});
+  const Contenedor({super.key});
 
   @override
   Widget build(BuildContext context) {

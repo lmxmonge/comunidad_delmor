@@ -1,13 +1,11 @@
 import 'package:comunidad_delmor/utils/tamanios.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import '../../routes/app_pages.dart';
 import '../../../../utils/iconos.dart';
 import 'custom_drawer_controller.dart';
 
 class CustomDrawer extends StatelessWidget {
-   CustomDrawer({super.key});
+   const CustomDrawer({super.key});
 
   // final CustomDrawerController controller = Get.put(CustomDrawerController(),tag: "navbar",);
   @override

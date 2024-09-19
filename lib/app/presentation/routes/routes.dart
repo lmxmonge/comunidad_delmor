@@ -5,6 +5,7 @@ abstract class Routes {
   static const login = _Paths.login;
   static const other = _Paths.other;
   static const perfil = _Paths.perfil;
+  static const home = _Paths.home;
 }
 
 abstract class _Paths {
