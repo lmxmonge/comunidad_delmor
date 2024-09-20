@@ -8,5 +8,7 @@ class Iconos {
   static const cake = '${_path}cake.png';
   static const team = '${_path}team.png';
   static const maletin = '${_path}maletin.png';
+  static const cerrarSesion = '${_path}cerrar-sesion-de-usuario.png';
+
 
 }

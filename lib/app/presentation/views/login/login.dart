@@ -42,7 +42,7 @@ class Login extends StatelessWidget {
   }
 
   Widget headerLogin() {
-    return Column(
+    return const Column(
       children: [
         SizedBox(
             height: 230,
@@ -52,7 +52,7 @@ class Login extends StatelessWidget {
         ),
 
         Text(
-          'BIENBENIDO',
+          'BIENVENIDO',
           style: TextStyle(
             color: Colors.white,
             fontSize: 30,

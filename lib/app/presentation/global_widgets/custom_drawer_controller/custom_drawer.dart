@@ -32,6 +32,9 @@ class CustomDrawer extends StatelessWidget {
                   }),
               listTileItem(title: "Cumpleaños", iconPath: Iconos.cake, onTap: () {
                 controller.handleIndexChanged(1);
+              }),
+              listTileItem(title: "Cerrar Sesión", iconPath: Iconos.cerrarSesion, onTap: (){
+                controller.cerrarSesion();
               })
             ],
           ),
