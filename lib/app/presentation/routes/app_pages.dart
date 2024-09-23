@@ -20,8 +20,8 @@ class AppPages {
   static final routes = [
     GetPage(name: _Paths.contenedor, page: () => const Contenedor()),
     GetPage(name: _Paths.home, page: () => HomeView()),
-    GetPage(name: _Paths.other, page: () => OtherView()),
-    GetPage(name: _Paths.perfil, page: () => Perfil()),
+    GetPage(name: _Paths.other, page: () => const OtherView()),
+    GetPage(name: _Paths.perfil, page: () => const Perfil()),
     GetPage(
       name: _Paths.login,
       page: () => Login(),

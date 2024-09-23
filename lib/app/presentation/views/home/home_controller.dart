@@ -12,8 +12,9 @@ class HomeController extends GetxController {
 
   void decrement() {
     print("valor: ${counter.valor}");
-    if(counter.valor != 0)
-    _counter.value = CounterModel(counter.valor - 1);
+    if(counter.valor != 0) {
+      _counter.value = CounterModel(counter.valor - 1);
+    }
   }
 
 }

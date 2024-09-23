@@ -7,7 +7,7 @@ import '../login_controller.dart';
 class BoodyLogin extends StatefulWidget {
   final formKey;
 
-  BoodyLogin({
+  const BoodyLogin({
     super.key,
     required this.formKey,
   });
@@ -59,7 +59,7 @@ class _BoodyLoginState extends State<BoodyLogin> {
                   children: [
                     Obx(() {
                       if (loginController.isLoading.value) {
-                        return Center(child: const CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       return Expanded(

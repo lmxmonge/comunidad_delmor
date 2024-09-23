@@ -10,10 +10,10 @@ class LoginProvider extends GetConnect {
       'password': password,
     };
 
-    return get('${ApiConstant.baseUrl}/${ApiConstant.loginEndpoint}/${username}/${password}');
+    return get('${ApiConstant.baseUrl}/${ApiConstant.loginEndpoint}/$username/$password');
   }
 
   Future<Response> estaLogueado(String username) {
-    return get('${ApiConstant.baseUrl}/${ApiConstant.isLogged}/${username}');
+    return get('${ApiConstant.baseUrl}/${ApiConstant.isLogged}/$username');
   }
 }

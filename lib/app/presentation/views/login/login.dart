@@ -2,7 +2,6 @@ import 'package:comunidad_delmor/app/presentation/views/login/local_widgets/bood
 import 'package:comunidad_delmor/utils/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:rive/rive.dart' as rive;
 
 class Login extends StatelessWidget {
   Login({super.key});
@@ -29,7 +28,7 @@ class Login extends StatelessWidget {
             ),
           ),
           child: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -63,7 +62,7 @@ class Login extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
+        const Text(
           "Comunidad DELMOR",
           style: TextStyle(
             color: Colors.white,
@@ -71,7 +70,7 @@ class Login extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
+        const Text(
           "v2.0.0",
           style: TextStyle(
             color: Colors.white,

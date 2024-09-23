@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../utils/colores.dart';
 import '../../../../utils/iconos.dart';
 
 class SinConexion extends StatelessWidget {
@@ -8,7 +7,7 @@ class SinConexion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

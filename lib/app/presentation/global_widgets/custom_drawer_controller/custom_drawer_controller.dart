@@ -20,8 +20,8 @@ class CustomDrawerController extends GetxController {
     //dialogo
     Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
       return AlertDialog(
-        title: Text("Cerrar Sesión"),
-        content: Text("¿Está seguro que desea cerrar sesión?"),
+        title: const Text("Cerrar Sesión"),
+        content: const Text("¿Está seguro que desea cerrar sesión?"),
         actions: [
           TextButton(
               onPressed: () {

@@ -6,11 +6,11 @@ class Colores {
   static const Color secondary = Color(0xFF0069c0);
   static const Color secondaryVariant = Color(0xFFc51162);
 
-  static const Color primaryLight = Color(0xFF);
-  static const Color secondaryLight = Color(0xFF);
+  static const Color primaryLight = Color(0x000000ff);
+  static const Color secondaryLight = Color(0x000000ff);
 
-  static const Color primaryDark = Color(0xFF);
-  static const Color secondaryDark = Color(0xFF);
+  static const Color primaryDark = Color(0x000000ff);
+  static const Color secondaryDark = Color(0x000000ff);
 
   static const Color white = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFFAFAFA);
