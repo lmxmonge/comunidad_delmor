@@ -9,12 +9,15 @@ class Login extends StatelessWidget {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       drawerScrimColor: Colors.transparent,
       body: Container(
-        //gradiente
+          //gradiente
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -31,8 +34,10 @@ class Login extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: Column(
                 children: [
-                  headerLogin(),
-                  const SizedBox(height: 15,),
+                  headerLogin(size: size),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   BoodyLogin(formKey: formKey),
                 ],
               ),
@@ -41,17 +46,16 @@ class Login extends StatelessWidget {
     );
   }
 
-  Widget headerLogin() {
-    return const Column(
+  Widget headerLogin({Size? size}) {
+    return Column(
       children: [
         SizedBox(
-            height: 230,
-            width: 300,
-            child: rive.RiveAnimation.asset('lib/assets/animations/people.riv',useArtboardSize:true),
-            // child: Lottie.asset('lib/assets/animations/people2.json'),
+          height: size!.height * 0.33,
+          width: 300,
+          // child: rive.RiveAnimation.asset('lib/assets/animations/people.riv',useArtboardSize:true),
+          child: Lottie.asset('lib/assets/animations/people3.json'),
         ),
-
-        Text(
+        const Text(
           'BIENVENIDO',
           style: TextStyle(
             color: Colors.white,

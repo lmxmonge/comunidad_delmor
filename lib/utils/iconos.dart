@@ -20,6 +20,9 @@ class Iconos {
   static const comisariato = '${_path}comisariato.png';
   static const recorrido = '${_path}recorrido.png';
 
+  //
+  static const String sinConexion = '${_path}sin-conexion.png';
+
 
   static const String _pathImages = 'lib/assets/images/';
   static const String drawerHeader = '${_pathImages}comunidad.png';

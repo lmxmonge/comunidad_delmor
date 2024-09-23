@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:comunidad_delmor/app/data/repositories/login_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 
 import '../../routes/app_pages.dart';
 
@@ -18,16 +17,18 @@ class LoginController extends GetxController {
   // Método para manejar el login
   Future<void> estaLogueado(String username, String password) async {
 
+
     try {
-      final response = await _loginRepository.estaLogueado(username);
+      final Response response = await _loginRepository.estaLogueado(username);
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
 
         if (data['userUsed'] == false) login(username, password);
       } else {
         errorMessage.value =
-            response.body['message'] ?? 'Error al iniciar sesión';
+            response.body['message'] ?? 'Error al verificar si el usuario está logueado';
         print(errorMessage.value);
+        dialogoError();
       }
     } catch (e) {
       errorMessage.value = 'Error: $e';
@@ -38,6 +39,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> login(String username, String password) async {
+
     isLoading.value = true;
 
     try {
