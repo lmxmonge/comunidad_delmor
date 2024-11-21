@@ -42,4 +42,5 @@ class CustomDrawerController extends GetxController {
       );
     });
   }
+
 }

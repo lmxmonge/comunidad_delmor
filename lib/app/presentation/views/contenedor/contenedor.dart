@@ -6,12 +6,15 @@ import 'package:get/get.dart';
 import '../../routes/app_pages.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer_controller.dart';
+import 'contenedor_controller.dart';
 
 //Cargamos en una lista de widgets los tabs pages
 final _bodyContent = [const Perfil(), const Cumpleanios()];
 
 class Contenedor extends StatelessWidget {
-  const Contenedor({super.key});
+   Contenedor({super.key});
+  // //iniciar el contenedorCOntroller
+  // final ContenedorController contenedorController = Get.put(ContenedorController());
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:comunidad_delmor/app/data/models/user_model.dart';
 import 'package:comunidad_delmor/app/data/services/login_service.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,20 +36,38 @@ class LoginRepositoryImpl implements ILoginRepository {
   saveUser(data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    await prefs.setString(Constantes.user, data.toString());
+    bool user = data['user'] ?? false;
+    int idUsuario = data['idusuario'] ?? 0;
+    int codigoSap = data['codigoSAP'] ?? 0;
+    String username = data['username'] ?? '';
+    String password = data['password'] ?? '';
+
+    await prefs.setBool(Constantes.user, user);
+    await prefs.setString(Constantes.idUsuario, idUsuario.toString());
+    await prefs.setString(Constantes.codigoSap, codigoSap.toString());
     await prefs.setBool(Constantes.isLogged, true);
+    await prefs.setString(Constantes.userName, username);
+    await prefs.setString(Constantes.password, password);
   }
 
   @override
-  getUser() async {
+  Future<UserModel> getUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(Constantes.user);
+
+    UserModel userModel = UserModel(
+      idUsuario: prefs.getString(Constantes.idUsuario) ?? '',
+      codigoSap: prefs.getString(Constantes.codigoSap) ?? '',
+      username: prefs.getString(Constantes.userName) ?? '',
+      password: prefs.getString(Constantes.password) ?? '',
+    );
+
+    return userModel;
   }
 
   @override
   isLogged() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     return prefs.getBool(Constantes.isLogged);
   }
 }
+// {"idusuario":272,"codigoSAP":780,"logged":1,"user":true}

@@ -16,8 +16,6 @@ class LoginController extends GetxController {
 
   // Método para manejar el login
   Future<void> estaLogueado(String username, String password) async {
-
-
     try {
       final Response response = await _loginRepository.estaLogueado(username);
       if (response.statusCode == 200) {
@@ -25,8 +23,8 @@ class LoginController extends GetxController {
 
         if (data['userUsed'] == false) login(username, password);
       } else {
-        errorMessage.value =
-            response.body['message'] ?? 'Error al verificar si el usuario está logueado';
+        errorMessage.value = response.body['message'] ??
+            'Error al verificar si el usuario está logueado';
         print(errorMessage.value);
         dialogoError();
       }
@@ -39,12 +37,12 @@ class LoginController extends GetxController {
   }
 
   Future<void> login(String username, String password) async {
-
     isLoading.value = true;
 
     try {
       final response = await _loginRepository.login(username, password);
 
+      // print(response.body);
       if (response.statusCode != 200) {
         errorMessage.value = 'Error al iniciar sesión';
         dialogoError();
@@ -52,7 +50,6 @@ class LoginController extends GetxController {
       }
 
       Map<String, dynamic> data = jsonDecode(response.body);
-      print("data: $data");
 
       if (data['user'] != true || data['user'] == null) {
         errorMessage.value = 'Usuario o contraseña incorrectos';
@@ -60,11 +57,15 @@ class LoginController extends GetxController {
         return;
       }
 
-      await _loginRepository.saveUser(data['user']);
+      data['username'] = username;
+      data['password'] = password;
+
+      await _loginRepository.saveUser(data);
 
       Get.offNamed(Routes.contenedor);
     } catch (e) {
       errorMessage.value = 'Error: $e';
+      print(errorMessage.value);
     } finally {
       isLoading.value = false;
     }
@@ -84,5 +85,10 @@ class LoginController extends GetxController {
       ],
     );
   }
+
+  Future<dynamic> getUser() async {
+    return await _loginRepository.getUser();
+  }
 }
 // LMonge780
+//{"idusuario":272,"codigoSAP":780,"logged":1,"user":true}

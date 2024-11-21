@@ -1,5 +1,6 @@
 // lib/app/routes/app_pages.dart
 import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor.dart';
+import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor_bindig.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:get/get.dart';
 
@@ -18,10 +19,17 @@ class AppPages {
   static const initial = Routes.splash; // Ruta inicial
 
   static final routes = [
-    GetPage(name: _Paths.contenedor, page: () => const Contenedor()),
+    GetPage(
+      name: _Paths.contenedor,
+      page: () => Contenedor(),
+      binding: ContenedorBindig(),
+    ),
     GetPage(name: _Paths.home, page: () => HomeView()),
-    GetPage(name: _Paths.other, page: () => const OtherView()),
-    GetPage(name: _Paths.perfil, page: () => const Perfil()),
+    GetPage(name: _Paths.other, page: () => OtherView()),
+    GetPage(
+      name: _Paths.perfil,
+      page: () => Perfil(),
+    ),
     GetPage(
       name: _Paths.login,
       page: () => Login(),
