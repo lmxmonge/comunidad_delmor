@@ -8,6 +8,7 @@ import '../views/login/login_bindig.dart';
 import '../views/home/home.dart';
 import '../views/other_view/other_view.dart';
 import '../views/login/login.dart';
+import '../views/perfil/perfil_binding.dart';
 import '../views/splash_page/spalsh_page.dart';
 import '../views/splash_page/splash_bindig.dart';
 
@@ -19,17 +20,16 @@ class AppPages {
   static const initial = Routes.splash; // Ruta inicial
 
   static final routes = [
-    GetPage(
-      name: _Paths.contenedor,
-      page: () => Contenedor(),
-      binding: ContenedorBindig(),
-    ),
+    GetPage(name: _Paths.contenedor, page: () => const Contenedor(), bindings: [
+      PerfilBinding(),
+    ]),
     GetPage(name: _Paths.home, page: () => HomeView()),
-    GetPage(name: _Paths.other, page: () => OtherView()),
-    GetPage(
-      name: _Paths.perfil,
-      page: () => Perfil(),
-    ),
+    GetPage(name: _Paths.other, page: () => const OtherView()),
+    // GetPage(
+    //   name: _Paths.perfil,
+    //   page: () => Perfil(),
+    //   binding: PerfilBinding(),
+    // ),
     GetPage(
       name: _Paths.login,
       page: () => Login(),

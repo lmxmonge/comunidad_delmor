@@ -15,6 +15,7 @@ class ContenedorController extends GetxController {
   @override
   void onInit() {
     getUserData();
+    fetchDatosLaborales();
     super.onInit();
   }
 
@@ -23,4 +24,6 @@ class ContenedorController extends GetxController {
 
     print("Hola mundo: " + preferences.username);
   }
+
+  void fetchDatosLaborales() {}
 }
