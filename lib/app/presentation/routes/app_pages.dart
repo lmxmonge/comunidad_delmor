@@ -1,6 +1,8 @@
 // lib/app/routes/app_pages.dart
+import 'package:comunidad_delmor/app/presentation/views/configuracion/configuracion_binding.dart';
 import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor.dart';
 import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor_bindig.dart';
+import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios_binding.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +24,8 @@ class AppPages {
   static final routes = [
     GetPage(name: _Paths.contenedor, page: () => const Contenedor(), bindings: [
       PerfilBinding(),
+      CumpleaniosBinding(),
+      ConfiguracionBinding()
     ]),
     GetPage(name: _Paths.home, page: () => HomeView()),
     GetPage(name: _Paths.other, page: () => const OtherView()),

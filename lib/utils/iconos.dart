@@ -41,4 +41,9 @@ class Iconos {
   static const salario = '${_path}salario.png';
   static const seguroSocial = '${_path}seguro-social.png';
   static const vacaciones = '${_path}vacaciones.png';
+
+
+  ///Configuracion
+
+  static const candado = '${_path}candado.png';
 }

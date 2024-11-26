@@ -24,8 +24,7 @@ class Perfil extends StatelessWidget {
             // Una vez que los datos están cargados, mostrar la información
             if (controller.datosLaborales.value != null) {
               // return Text(controller.datosLaborales.value!.nombres.toString());
-
-              return Container(
+              return SizedBox(
                 width: double.infinity,
                 child: Column(
                   children: [

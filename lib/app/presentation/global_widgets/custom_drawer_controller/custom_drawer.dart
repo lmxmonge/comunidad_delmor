@@ -27,6 +27,16 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 child: null,
               ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Datos de Perfil",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
               listTileItem(
                   iconPath: Iconos.userColor,
                   title: 'Perfil',
@@ -39,10 +49,7 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     controller.handleIndexChanged(1);
                   }),
-              listTileItem(
-                  title: "Datos Laborales",
-                  iconPath: Iconos.maletinColor,
-                  onTap: () {}),
+
               const Divider(),
 
               const Padding(
@@ -90,6 +97,8 @@ class CustomDrawer extends StatelessWidget {
                   title: "Configuración",
                   iconPath: Iconos.configuraciones,
                   onTap: () {
+                    controller.handleIndexChanged(2);
+
                   }),
 
               listTileItem(

@@ -1,3 +1,4 @@
+import 'package:comunidad_delmor/app/presentation/views/configuracion/configuracion.dart';
 import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,11 @@ import '../perfil/perfil_controller.dart';
 import 'contenedor_controller.dart';
 
 //Cargamos en una lista de widgets los tabs pages
-final _bodyContent = [const Perfil(), const Cumpleanios()];
+final _bodyContent = [
+  const Perfil(),
+  const Cumpleanios(),
+   Configuracion(),
+];
 
 class Contenedor extends StatelessWidget {
   const Contenedor({super.key});
@@ -30,14 +35,15 @@ class Contenedor extends StatelessWidget {
         builder: (_) {
           return Scaffold(
               drawer: const CustomDrawer(),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  Get.toNamed(Routes.other);
-                },
-                child: const Icon(Icons.add),
-              ),
+              // floatingActionButton: FloatingActionButton(
+              //   onPressed: () {
+              //     Get.toNamed(Routes.other);
+              //   },
+              //   child: const Icon(Icons.add),
+              // ),
               appBar: AppBar(
-                title: const Text('Comunidad Delmor'),
+                title: appBarTitle(_.selectedIndex),
+                actions: [iconosActionAppBar(_.selectedIndex)],
               ),
               body: Column(
                 children: [
@@ -50,6 +56,31 @@ class Contenedor extends StatelessWidget {
                 ],
               ));
         });
+  }
+
+  appBarTitle(int selectedIndex) {
+    switch (selectedIndex) {
+      case 0:
+        return const Text("Perfil");
+      case 1:
+        return const Text("Cumpleaños");
+      case 2: // Otro
+        return const Text("Configuración");
+      default:
+        return const Text("Perfil");
+    }
+  }
+
+  iconosActionAppBar(int selectedIndex) {
+    switch (selectedIndex) {
+      case 1:
+        return IconButton(
+          icon: const Icon(Icons.cake),
+          onPressed: () {},
+        );
+      default:
+        return Container();
+    }
   }
 }
 

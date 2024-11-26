@@ -1,4 +1,4 @@
-class Cumpleanieros {
+class CumpleanierosModel {
   final String nombres;
   final String fechaDeIngreso;
   final String area;
@@ -6,7 +6,7 @@ class Cumpleanieros {
   final String mesesDeServicio;
   final String cumpleanios;
 
-  Cumpleanieros({
+  CumpleanierosModel({
     required this.nombres,
     required this.fechaDeIngreso,
     required this.area,
@@ -15,8 +15,8 @@ class Cumpleanieros {
     required this.cumpleanios,
   });
 
-  factory Cumpleanieros.fromJson(Map<String, dynamic> json) {
-    return Cumpleanieros(
+  factory CumpleanierosModel.fromJson(Map<String, dynamic> json) {
+    return CumpleanierosModel(
       nombres: json['nombres'],
       fechaDeIngreso: json['startDate'],
       area: json['descCentrBen'],
