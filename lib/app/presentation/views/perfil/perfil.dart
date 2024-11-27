@@ -158,7 +158,7 @@ class Perfil extends StatelessWidget {
       required String title,
       required String content}) {
     return Container(
-      height: 70,
+      height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Card(
         color: Colors.white,

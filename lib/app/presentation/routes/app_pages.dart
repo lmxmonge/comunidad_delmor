@@ -1,11 +1,14 @@
 // lib/app/routes/app_pages.dart
+import 'package:comunidad_delmor/app/presentation/views/circulares/circulares_binding.dart';
 import 'package:comunidad_delmor/app/presentation/views/configuracion/configuracion_binding.dart';
 import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor.dart';
 import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor_bindig.dart';
 import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios_binding.dart';
+import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums_binding.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:get/get.dart';
 
+import '../views/boletin_informativo/boletin_informativo_binding.dart';
 import '../views/login/login_bindig.dart';
 import '../views/home/home.dart';
 import '../views/other_view/other_view.dart';
@@ -25,7 +28,10 @@ class AppPages {
     GetPage(name: _Paths.contenedor, page: () => const Contenedor(), bindings: [
       PerfilBinding(),
       CumpleaniosBinding(),
-      ConfiguracionBinding()
+      ConfiguracionBinding(),
+      CircularesBinding(),
+      MemorandumsBinding(),
+      BoletinInformativoBinding(),
     ]),
     GetPage(name: _Paths.home, page: () => HomeView()),
     GetPage(name: _Paths.other, page: () => const OtherView()),

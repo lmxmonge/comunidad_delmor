@@ -44,18 +44,16 @@ class CustomDrawer extends StatelessWidget {
                     controller.handleIndexChanged(0);
                   }),
               listTileItem(
-                  title: "Cumpleaños",
+                  title: "Cumpleañeros",
                   iconPath: Iconos.cakeColor,
                   onTap: () {
                     controller.handleIndexChanged(1);
                   }),
-
               const Divider(),
-
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "Documentos",
+                  "Noticias",
                   style: TextStyle(
                       fontSize: 16,
                       color: Colors.black54,
@@ -65,49 +63,44 @@ class CustomDrawer extends StatelessWidget {
               listTileItem(
                   title: "Circulares",
                   iconPath: Iconos.catalogo,
-                  onTap: () {},
+                  onTap: () {
+                    controller.handleIndexChanged(3);
+                  },
                   hasNotification: true),
               listTileItem(
                   title: "Memorandums",
                   iconPath: Iconos.memorandos,
-                  onTap: () {}),
-
+                  onTap: () {
+                    controller.handleIndexChanged(4);
+                  }),
               listTileItem(
                 title: "Boletín Informativo",
                 iconPath: Iconos.boletin,
-                onTap: () {},
+                onTap: () {
+                  controller.handleIndexChanged(5);
+                },
                 hasNotification: true,
               ),
-
               const Divider(),
               listTileItem(
                   title: "Saldo Comisariato",
                   iconPath: Iconos.comisariato,
-                  onTap: () {
-                  }),
-
+                  onTap: () {}),
               listTileItem(
-                  title: "Recorrido",
-                  iconPath: Iconos.recorrido,
-                  onTap: () {
-
-                  }),
+                  title: "Recorrido", iconPath: Iconos.recorrido, onTap: () {}),
               const Divider(),
               listTileItem(
                   title: "Configuración",
                   iconPath: Iconos.configuraciones,
                   onTap: () {
                     controller.handleIndexChanged(2);
-
                   }),
-
               listTileItem(
                   title: "Cerrar Sesión",
                   iconPath: Iconos.cerrarSesion,
                   onTap: () {
                     controller.cerrarSesion();
                   }),
-
             ],
           ),
         );

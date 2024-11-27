@@ -19,7 +19,8 @@ class PerfilController extends GetxController {
     isLoading(true);
 
     fetchDatosLaborales().then((value) {
-isLoading(false);
+      isLoading(false);
+
       fetchDatosUsuario().then((value) {
         isLoading(false);
       });

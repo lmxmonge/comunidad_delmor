@@ -1,5 +1,7 @@
+import 'package:comunidad_delmor/app/presentation/views/boletin_informativo/boletin_informativo.dart';
 import 'package:comunidad_delmor/app/presentation/views/configuracion/configuracion.dart';
 import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios.dart';
+import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +11,7 @@ import '../../../data/services/api_service.dart';
 import '../../routes/app_pages.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer_controller.dart';
+import '../circulares/circulares.dart';
 import '../perfil/perfil_controller.dart';
 import 'contenedor_controller.dart';
 
@@ -16,7 +19,10 @@ import 'contenedor_controller.dart';
 final _bodyContent = [
   const Perfil(),
   const Cumpleanios(),
-   Configuracion(),
+  Configuracion(),
+  Circulares(),
+  Memorandums(),
+  BoletinInformativo()
 ];
 
 class Contenedor extends StatelessWidget {
@@ -66,6 +72,12 @@ class Contenedor extends StatelessWidget {
         return const Text("Cumpleaños");
       case 2: // Otro
         return const Text("Configuración");
+      case 3: // Otro
+        return const Text("Circulares");
+      case 4: // Otro
+        return const Text("Memorandums");
+      case 5: // Otro
+        return const Text("Boletín Informativo");
       default:
         return const Text("Perfil");
     }

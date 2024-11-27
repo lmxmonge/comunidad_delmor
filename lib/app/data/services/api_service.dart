@@ -15,8 +15,14 @@ abstract class ApiService {
 
   Future<dynamic> cambiarContrasenia(String text, String codigoSap);
 
-  String _manejarRespuestaPost(http.Response response);
+  Future<dynamic> fetchBoletinesInformativos();
 
+  Future<dynamic> fetchCirculares({required String userSap});
+
+  Future<dynamic> fetchMemorandums({required String userSap});
+
+
+  String _manejarRespuestaPost(http.Response response);
 }
 
 class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
@@ -45,7 +51,7 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   Future fetchCumpleanieros() async {
     try {
       var response =
-      await http.get(Uri.parse('${ApiConstant.baseUrl}/Cumpleanieros'));
+          await http.get(Uri.parse('${ApiConstant.baseUrl}/Cumpleanieros'));
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
@@ -113,37 +119,87 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
 
       return _manejarRespuestaPost(
           response); // Retornar el mensaje de la respuesta
-
     } catch (e) {
       print("Error en la solicitud: $e");
       throw Exception("Error al intentar cambiar la contraseña");
     }
   }
 
+  @override
+  _manejarRespuestaPost(http.Response response) {
+    if (response.statusCode == 200) {
+      return verMensaje(response);
+    } else if (response.statusCode == 404) {
+      throw Exception(verMensaje(response));
+      throw Exception(jsonDecode(response.body)['message']);
+    } else if (response.statusCode == 500) {
+      throw Exception(verMensaje(response));
+    } else {
+      throw Exception('Unexpected error: ${response.statusCode}');
+    }
+  }
 
-@override
-_manejarRespuestaPost(http.Response response) {
-  if (response.statusCode == 200) {
-    return verMensaje(response);
-  } else if (response.statusCode == 404) {
-    throw Exception(verMensaje(response));
-    throw Exception(jsonDecode(response.body)['message']);
-  } else if (response.statusCode == 500) {
-    throw Exception(verMensaje(response));
-  } else {
-    throw Exception('Unexpected error: ${response.statusCode}');
+  String verMensaje(http.Response response) {
+    try {
+      final body = jsonDecode(response.body);
+      if (body is Map<String, dynamic> && body.containsKey('message')) {
+        return body['message'] as String;
+      }
+    } catch (e) {
+      // Manejo de errores en caso de que el body no sea JSON válido
+      print("Error al decodificar el cuerpo de la respuesta: $e");
+    }
+    return response.reasonPhrase ?? 'Error desconocido';
+  }
+
+  @override
+  Future fetchBoletinesInformativos() async {
+    try {
+      var response = await http
+          .get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfBoletinAjax'));
+
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        return jsonData;
+      } else {
+        return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
+
+  @override
+  Future fetchCirculares({required String userSap}) async {
+    try {
+      var response =
+          await http.get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfAjax/$userSap'));
+
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        return jsonData;
+      } else {
+        return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
+
+  @override
+  Future fetchMemorandums({required String userSap}) async {
+    try {
+      var response =
+          await http.get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfMemoAjax/$userSap'));
+
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        return jsonData;
+      } else {
+        return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
   }
 }
-
-String verMensaje(http.Response response) {
-  try {
-    final body = jsonDecode(response.body);
-    if (body is Map<String, dynamic> && body.containsKey('message')) {
-      return body['message'] as String;
-    }
-  } catch (e) {
-    // Manejo de errores en caso de que el body no sea JSON válido
-    print("Error al decodificar el cuerpo de la respuesta: $e");
-  }
-  return response.reasonPhrase ?? 'Error desconocido';
-}}

@@ -28,7 +28,7 @@ class Cumpleanios extends StatelessWidget {
                 ? ListView.builder(
                     itemCount: controller.cumpleanieros.length,
                     itemBuilder: (context, index) {
-                      return cummleanieroCard(controller.cumpleanieros[index]);
+                      return cummpleanieroCard(controller.cumpleanieros[index]);
                     },
                   )
                 : Container(),
@@ -36,7 +36,7 @@ class Cumpleanios extends StatelessWidget {
     });
   }
 
-  Widget cummleanieroCard(CumpleanierosModel cumpleaniero) {
+  Widget cummpleanieroCard(CumpleanierosModel cumpleaniero) {
     var tituloStyle = const TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.bold,
