@@ -8,4 +8,6 @@ class Constantes {
   static String userName = 'username';
 
   static String password = 'password';
+
+  static String token = 'token';
 }

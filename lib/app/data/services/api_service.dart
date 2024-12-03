@@ -21,6 +21,7 @@ abstract class ApiService {
 
   Future<dynamic> fetchMemorandums({required String userSap});
 
+  Future<dynamic> sendTokenToServer(String token, String userSap);
 
   String _manejarRespuestaPost(http.Response response);
 }
@@ -172,8 +173,8 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchCirculares({required String userSap}) async {
     try {
-      var response =
-          await http.get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfAjax/$userSap'));
+      var response = await http
+          .get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfAjax/$userSap'));
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
@@ -189,8 +190,8 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchMemorandums({required String userSap}) async {
     try {
-      var response =
-          await http.get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfMemoAjax/$userSap'));
+      var response = await http
+          .get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfMemoAjax/$userSap'));
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
@@ -200,6 +201,41 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
       }
     } catch (e) {
       return 'Error: $e';
+    }
+  }
+
+  @override
+  Future<String> sendTokenToServer(String token, String userSap) async {
+    final url =
+        '${ApiConstant.baseUrl}/guardarToken'; // Cambia esta URL por la URL de tu servidor PHP
+
+    // Cuerpo del JSON que se enviará
+    var jsonBody = jsonEncode({
+      'data': [
+        {
+          "codigoSAP": userSap,
+          "token": token,
+        }
+      ]
+    });
+    print("Body: $jsonBody");
+    print("URL: ${ApiConstant.baseUrl}/cambiarPassword");
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'json': jsonBody,
+        },
+      );
+
+      return _manejarRespuestaPost(response);
+    } catch (e) {
+      print("Error en la solicitud: $e");
+      throw Exception("Error al intentar enviar el token");
     }
   }
 }

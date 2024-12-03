@@ -90,7 +90,7 @@ class BoletinInformativoController extends GetxController {
     try {
       boletines.value = await respository.fetchBoletinesInformativos();
 
-      print("datos boletines:  ${boletines.first.url}");
+      // print("datos boletines:  ${boletines.first.url}");
     } catch (e) {
       print(e);
     }

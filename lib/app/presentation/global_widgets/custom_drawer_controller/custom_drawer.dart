@@ -2,6 +2,7 @@ import 'package:comunidad_delmor/utils/tamanios.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../utils/iconos.dart';
+import '../../views/notificaciones/notificaciones_controller.dart';
 import 'custom_drawer_controller.dart';
 
 class CustomDrawer extends StatelessWidget {

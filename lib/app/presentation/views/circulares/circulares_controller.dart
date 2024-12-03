@@ -88,7 +88,7 @@ class CircularesController extends GetxController {
     try {
       circulares.value = await respository.fetchCirculares();
 
-      print("datos circulares:  ${circulares.first.url}");
+      // print("datos circulares:  ${circulares.first.url}");
     } catch (e) {
       print(e);
     }

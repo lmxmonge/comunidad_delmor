@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "705808373390",
+    "project_id": "comunidad-delmor",
+    "storage_bucket": "comunidad-delmor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705808373390:android:6a76d6f4a5595d72bb5bdf",
+        "android_client_info": {
+          "package_name": "com.example.comunidad_delmor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPv4uionMbtMWhIIW3Y6l5BGJuUNCdxzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

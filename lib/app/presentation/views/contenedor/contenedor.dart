@@ -12,6 +12,7 @@ import '../../routes/app_pages.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer_controller.dart';
 import '../circulares/circulares.dart';
+import '../notificaciones/notificaciones_controller.dart';
 import '../perfil/perfil_controller.dart';
 import 'contenedor_controller.dart';
 
@@ -35,6 +36,8 @@ class Contenedor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NotificationsController controller = Get.find();
+
     return GetBuilder<CustomDrawerController>(
         id: "navbar",
         init: CustomDrawerController(),

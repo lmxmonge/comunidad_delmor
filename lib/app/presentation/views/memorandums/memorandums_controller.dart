@@ -89,7 +89,7 @@ class MemorandumsController extends GetxController {
     try {
       memorandums.value = await respository.fetchMemorandums();
 
-      print("datos memorandums:  ${memorandums.first.url}");
+      // print("datos memorandums:  ${memorandums.first.url}");
     } catch (e) {
       print(e);
     }

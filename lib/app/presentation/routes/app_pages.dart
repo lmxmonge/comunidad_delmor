@@ -5,6 +5,7 @@ import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor.da
 import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor_bindig.dart';
 import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios_binding.dart';
 import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums_binding.dart';
+import 'package:comunidad_delmor/app/presentation/views/notificaciones/notificaciones_bindig.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +27,7 @@ class AppPages {
 
   static final routes = [
     GetPage(name: _Paths.contenedor, page: () => const Contenedor(), bindings: [
+      NotificacionesBinding(),
       PerfilBinding(),
       CumpleaniosBinding(),
       ConfiguracionBinding(),
