@@ -31,7 +31,7 @@ class PerfilController extends GetxController {
     try {
       datosLaborales.value = await respository.fetchDatosLaborales();
 
-      print("datos  ${datosLaborales.value}");
+      print("datos:  ${datosLaborales.value}");
     } finally {}
   }
 
@@ -39,7 +39,7 @@ class PerfilController extends GetxController {
     try {
       datosUsuairo.value = await respository.fetchDatosUsuario();
 
-      print("datos  ${datosUsuairo.value}");
+      print("datos:  ${datosUsuairo.value}");
     } finally {}
   }
 }

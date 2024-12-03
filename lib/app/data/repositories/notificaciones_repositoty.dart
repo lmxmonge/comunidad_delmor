@@ -33,7 +33,7 @@ class NotificacionesRepository {
 
     try {
       respuesta = await _apiService.sendTokenToServer(token, codigoSap);
-      print('$respuesta');
+      print('respuesta enviarToken: $respuesta');
     } catch (e) {
       throw Exception(e);
     }

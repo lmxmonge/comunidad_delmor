@@ -16,7 +16,6 @@ class NotificationsController extends GetxController {
     super.onInit();
 
     await repository.initialize().then((value) {
-      print("Notificaciones inicializadas");
       repository.listenToMessages(
         onMessage: (RemoteMessage message) {
           messageTitle.value = message.notification?.title ?? "Sin título";
