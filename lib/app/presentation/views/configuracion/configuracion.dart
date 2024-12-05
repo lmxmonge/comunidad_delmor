@@ -21,18 +21,17 @@ class Configuracion extends StatelessWidget {
     // return Center(child: const Text('No se encontraron datos'));
     return SingleChildScrollView(
       child: Center(
-        child:SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              boody(controller),
-            ],
-          ),
-        )
-      ),
+          child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            boody(controller),
+          ],
+        ),
+      )),
     );
   }
 
@@ -89,7 +88,7 @@ class Configuracion extends StatelessWidget {
             style: const TextStyle(fontSize: 16),
           ),
           onTap: () {
-            showDialog();
+            showPasswordChangeDialog();
           },
         ),
         const Divider(
@@ -102,75 +101,63 @@ class Configuracion extends StatelessWidget {
     );
   }
 
-  showDialog() {
-    final _formKey = GlobalKey<FormState>();
-
+  void showPasswordChangeDialog() {
     Get.generalDialog(
+      barrierDismissible: false,
       pageBuilder: (context, animation, secondaryAnimation) {
         return AlertDialog(
           title: const Text("Cambiar Contraseña"),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Obx(
-                  () => TextFormField(
-                    controller: _newPasswordController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "Nueva Contraseña",
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          controller.passwordVisivility.value
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Obx(
+                    () => TextField(
+                      controller: _newPasswordController,
+                      obscureText: !controller.passwordVisivility.value,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: "Nueva Contraseña",
+                        errorText: controller.newPasswordError.value.isEmpty
+                            ? null
+                            : controller.newPasswordError.value,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.passwordVisivility.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: controller.changePasswordVisibility,
                         ),
-                        onPressed: controller.changePasswordVisibility,
                       ),
                     ),
-                    obscureText: !controller.passwordVisivility.value,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "La nueva contraseña es obligatoria";
-                      }
-                      if (value.length < 4) {
-                        return "Debe tener al menos 4 caracteres";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-                const SizedBox(height: 10),
-                Obx(
-                  () => TextFormField(
-                    controller: _repeatPasswordController,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: "Repetir Contraseña",
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          controller.repeatPasswordVisivility.value
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                  const SizedBox(height: 10),
+                  Obx(
+                    () => TextField(
+                      controller: _repeatPasswordController,
+                      obscureText: !controller.repeatPasswordVisivility.value,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: "Repetir Contraseña",
+                        errorText: controller.repeatPasswordError.value.isEmpty
+                            ? null
+                            : controller.repeatPasswordError.value,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.repeatPasswordVisivility.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: controller.changeRepeatPasswordVisibility,
                         ),
-                        onPressed: controller.changeRepeatPasswordVisibility,
                       ),
                     ),
-                    obscureText: !controller.repeatPasswordVisivility.value,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Repetir contraseña es obligatorio";
-                      }
-                      if (value != _newPasswordController.text) {
-                        return "Las contraseñas no coinciden";
-                      }
-                      return null;
-                    },
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            },
           ),
           actions: [
             TextButton(
@@ -179,10 +166,8 @@ class Configuracion extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                if (_formKey.currentState?.validate() == true) {
-
-                  controller.changePassword(_newPasswordController.text);
-                }
+                controller.validateAndSubmit(
+                    _newPasswordController, _repeatPasswordController);
               },
               child: const Text("Aceptar"),
             ),

@@ -1,10 +1,8 @@
 import 'package:comunidad_delmor/app/data/models/circulares_model.dart';
 import 'package:comunidad_delmor/utils/iconos.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 
-import '../pdf/pdfView.dart';
 import 'circulares_controller.dart';
 
 class Circulares extends StatelessWidget {
@@ -36,17 +34,6 @@ class Circulares extends StatelessWidget {
                             subtitle:
                                 Text(circular.fechaEmision),
                             onTap: () {
-                              // Get.to(() => Pdf(
-                              //     initialPath: controller.circulares[index].url));
-
-                              // Get.to(Perfil2());
-
-
-                              // if (controller.remotePDFpath.isNotEmpty)
-                              //   Get.to(Pdf2(
-                              //     path: controller.remotePDFpath.toString(),
-                              //   ));
-
                               controller.verPdf(circular);
                             },
                             enableFeedback: true,

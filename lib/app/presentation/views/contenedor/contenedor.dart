@@ -12,6 +12,7 @@ import '../../routes/app_pages.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer.dart';
 import '../../global_widgets/custom_drawer_controller/custom_drawer_controller.dart';
 import '../circulares/circulares.dart';
+import '../quejas_sugerencias/quejas_sugerencias.dart';
 import '../notificaciones/notificaciones_controller.dart';
 import '../perfil/perfil_controller.dart';
 import 'contenedor_controller.dart';
@@ -23,7 +24,9 @@ final _bodyContent = [
   Configuracion(),
   Circulares(),
   Memorandums(),
-  BoletinInformativo()
+  BoletinInformativo(),
+  Container(),
+  Container(),
 ];
 
 class Contenedor extends StatelessWidget {
@@ -81,6 +84,8 @@ class Contenedor extends StatelessWidget {
         return const Text("Memorandums");
       case 5: // Otro
         return const Text("Boletín Informativo");
+        // case 8:
+        // return const Text("Hacer un comentario");
       default:
         return const Text("Perfil");
     }

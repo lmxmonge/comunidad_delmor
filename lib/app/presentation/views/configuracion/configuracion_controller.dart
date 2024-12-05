@@ -78,4 +78,30 @@ class ConfiguracionController extends GetxController {
     Get.back();
     Get.offAllNamed(Routes.splash);
   }
+  RxString newPasswordError = ''.obs; // Inicializar con cadena vacía
+  RxString repeatPasswordError = ''.obs; // Inicializar con cadena vacía
+
+  void validateAndSubmit(TextEditingController newPasswordController,
+      TextEditingController repeatPasswordController) {
+    newPasswordError.value = newPasswordController.text.isEmpty
+        ? "La nueva contraseña es obligatoria"
+        : newPasswordController.text.length < 3
+        ? "Debe tener al menos 3 caracteres"
+        : '';
+
+    repeatPasswordError.value = repeatPasswordController.text.isEmpty
+        ? "Repetir contraseña es obligatorio"
+        : repeatPasswordController.text != newPasswordController.text
+        ? "Las contraseñas no coinciden"
+        : '';
+
+    if (newPasswordError.value.isEmpty && repeatPasswordError.value.isEmpty) {
+      repeatPasswordController.clear();
+      newPasswordController.clear();
+
+      changePassword(newPasswordController.text);
+      Get.back(); // Cerrar el diálogo
+    }
+  }
+
 }

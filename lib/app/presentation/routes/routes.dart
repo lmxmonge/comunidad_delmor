@@ -7,6 +7,8 @@ abstract class Routes {
   static const perfil = _Paths.perfil;
   static const home = _Paths.home;
   static const splash = _Paths.splash;
+  static const pdf = _Paths.pdf;
+  static const quejasSugerencias = _Paths.quejasSugerencias;
 }
 
 abstract class _Paths {
@@ -16,4 +18,6 @@ abstract class _Paths {
   static const other = '/other';
   static const perfil = '/perfil';
   static const splash = '/splash';
+  static const pdf = '/pdf';
+  static const quejasSugerencias = '/quejassugerencias';
 }

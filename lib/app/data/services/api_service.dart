@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
+import 'package:comunidad_delmor/app/data/models/quejas_sugerencias_model.dart';
 import 'package:get/get_connect.dart' as getConnect;
 import 'package:http/http.dart' as http;
 
 import '../api/api_constant.dart';
 import 'package:intl/intl.dart';
+
+import '../models/api_response.dart';
 
 abstract class ApiService {
   Future<dynamic> fetchDatosDaborales({required String userSap});
@@ -20,6 +24,9 @@ abstract class ApiService {
   Future<dynamic> fetchCirculares({required String userSap});
 
   Future<dynamic> fetchMemorandums({required String userSap});
+
+  Future<dynamic> enviarComentario(DatosUsuarioModel? datosUsuario,
+      QuejasSugerenciasModel? quejasSugerencias);
 
   Future<dynamic> sendTokenToServer(String token, String userSap);
 
@@ -122,35 +129,26 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
           response); // Retornar el mensaje de la respuesta
     } catch (e) {
       print("Error en la solicitud: $e");
-      throw Exception("Error al intentar cambiar la contraseña");
+      throw Exception("$e");
     }
   }
 
   @override
-  _manejarRespuestaPost(http.Response response) {
-    if (response.statusCode == 200) {
-      return verMensaje(response);
-    } else if (response.statusCode == 404) {
-      throw Exception(verMensaje(response));
-      throw Exception(jsonDecode(response.body)['message']);
-    } else if (response.statusCode == 500) {
-      throw Exception(verMensaje(response));
-    } else {
-      throw Exception('Unexpected error: ${response.statusCode}');
-    }
-  }
-
-  String verMensaje(http.Response response) {
+  String _manejarRespuestaPost(http.Response response) {
     try {
-      final body = jsonDecode(response.body);
-      if (body is Map<String, dynamic> && body.containsKey('message')) {
-        return body['message'] as String;
+      if (response.body.isEmpty) {
+        throw Exception(
+            "Error al procesar la respuesta: ${response.reasonPhrase}");
       }
-    } catch (e) {
-      // Manejo de errores en caso de que el body no sea JSON válido
-      print("Error al decodificar el cuerpo de la respuesta: $e");
+      final apiResponse = ApiResponse.fromJson(response.body);
+
+      if (apiResponse.status == 'error') throw Exception(apiResponse.message);
+
+      return apiResponse.message;
+    } on Exception catch (e) {
+      print("Error al procesar la respuesta: $e");
+      throw Exception("$e");
     }
-    return response.reasonPhrase ?? 'Error desconocido';
   }
 
   @override
@@ -236,6 +234,46 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
     } catch (e) {
       print("Error en la solicitud: $e");
       throw Exception("Error al intentar enviar el token");
+    }
+  }
+
+  @override
+  Future<String> enviarComentario(DatosUsuarioModel? datosUsuario,
+      QuejasSugerenciasModel? quejasSugerencias) async {
+    var fecha = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    quejasSugerencias?.fecha = fecha;
+
+    var jsonBody = jsonEncode({
+      'data': [
+        {
+          "idUsuario": datosUsuario?.usuarioSap,
+          "nombre": datosUsuario?.nombres,
+          "area": datosUsuario?.area,
+          "comentario": quejasSugerencias?.comentario,
+          "tipo": quejasSugerencias?.tipo,
+          "fecha": quejasSugerencias?.fecha,
+        }
+      ]
+    });
+
+    print("Body enviarComentario: $jsonBody");
+
+    try {
+      // Realizar la solicitud POST usando el paquete http
+      final response = await http.post(
+        Uri.parse('${ApiConstant.baseUrl}/guardarComentarios'),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'json': jsonBody,
+        },
+      );
+
+      return _manejarRespuestaPost(response);
+    } catch (e) {
+      print("Error en la solicitud: $e");
+      throw Exception("$e");
     }
   }
 }

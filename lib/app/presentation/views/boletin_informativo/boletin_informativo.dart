@@ -1,10 +1,8 @@
 import 'package:comunidad_delmor/app/data/models/boletin_informativo_model.dart';
 import 'package:comunidad_delmor/utils/iconos.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 
-import '../pdf/pdfView.dart';
 import 'boletin_informativo_controller.dart';
 
 class BoletinInformativo extends StatelessWidget {
@@ -39,17 +37,6 @@ class BoletinInformativo extends StatelessWidget {
                             subtitle:
                                 Text(boletin.fechaEmision),
                             onTap: () {
-                              // Get.to(() => Pdf(
-                              //     initialPath: controller.boletines[index].url));
-
-                              // Get.to(Perfil2());
-
-
-                              // if (controller.remotePDFpath.isNotEmpty)
-                              //   Get.to(Pdf2(
-                              //     path: controller.remotePDFpath.toString(),
-                              //   ));
-
                               controller.verPdf(boletin);
                             },
                             enableFeedback: true,
@@ -76,9 +63,9 @@ class BoletinInformativo extends StatelessWidget {
       fontSize: 19,
       fontWeight: FontWeight.bold,
     );
-    return Column(
+    return const Column(
       children: [
-        const SizedBox(
+        SizedBox(
           height: 10,
         ),
       ],

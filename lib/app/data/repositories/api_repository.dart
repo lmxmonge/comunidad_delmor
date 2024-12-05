@@ -6,9 +6,11 @@ import 'package:comunidad_delmor/app/data/models/cumpleanieros_model.dart';
 import 'package:comunidad_delmor/app/data/models/datos_laborales_model.dart';
 import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
 import 'package:comunidad_delmor/app/data/models/memorandums_model.dart';
+import 'package:comunidad_delmor/app/data/models/quejas_sugerencias_model.dart';
 import 'package:comunidad_delmor/app/data/services/api_service.dart';
 import 'package:comunidad_delmor/app/presentation/views/boletin_informativo/boletin_informativo.dart';
 import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/constantes.dart';
@@ -129,5 +131,16 @@ class ApiRespository {
     } else {
       throw Exception("Error al parsear memorandums");
     }
+  }
+
+  Future<String> enviarComentario(DatosUsuarioModel? value, Rxn<QuejasSugerenciasModel> quejasSugerencias) async {
+    late final String respuesta;
+
+    try {
+      respuesta = await _apiService.enviarComentario(value, quejasSugerencias.value);
+    } on Exception catch (e,s) {
+      throw Exception(e);
+    }
+    return respuesta;
   }
 }

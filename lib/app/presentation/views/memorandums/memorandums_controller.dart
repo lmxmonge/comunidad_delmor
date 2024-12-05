@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/models/memorandums_model.dart';
 import '../../routes/app_pages.dart';
-import '../pdf/pdfView.dart';
+import '../pdf/pdf_web_view.dart';
 
 class MemorandumsController extends GetxController {
   final ApiRespository respository;
@@ -34,22 +34,17 @@ class MemorandumsController extends GetxController {
     });
   }
 
-  verPdf(MemorandumsModel memorandum) {
+  verPdf(MemorandumsModel model) {
     isLoading(true);
 
     try {
-      createFileOfPdfUrl(memorandum).then((f) {
-        remotePDFpath.value = f.path;
-        isLoading(false);
-
-        if (remotePDFpath.isNotEmpty) {
-          Get.to(PdfView(
-            path: remotePDFpath.toString(),
+      Get.to(() => PdfWebView(
+            url: model.url,
+            title: model.nombre,
           ));
-        }
-      });
+      isLoading(false);
+      return;
     } catch (e) {
-      print("entro2: ");
       dialogo('Error al procesar el archivo!', true, tittle: 'Error');
       isLoading(false);
     }

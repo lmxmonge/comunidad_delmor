@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../repositories/api_repository.dart';
 
 class FirebaseService {
-  final navigatorKey = GlobalKey<NavigatorState>();
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -159,23 +158,6 @@ class FirebaseService {
     required NotificationDetails notificationDetails,
     required String payload,
   }) {
- navigatorKey.currentContext;
-    // if (navigatorKey.currentContext == null) {
-    //   print('Error: Contexto no disponible');
-    //   return;
-    // }
-    // showDialog(context: navigatorKey.currentContext!, builder: (context) {
-    //   return AlertDialog(
-    //     title: Text(title),
-    //     content: Text(boody),
-    //     actions: [
-    //       TextButton(
-    //         onPressed: () => Navigator.of(context).pop(),
-    //         child: Text('Cerrar'),
-    //       ),
-    //     ],
-    //   );
-    // });
 
  if(Get.context == null){
    print('Error: Contexto no disponible');

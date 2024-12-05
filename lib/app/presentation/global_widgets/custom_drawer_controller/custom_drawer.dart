@@ -2,6 +2,7 @@ import 'package:comunidad_delmor/utils/tamanios.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../utils/iconos.dart';
+import '../../routes/app_pages.dart';
 import '../../views/notificaciones/notificaciones_controller.dart';
 import 'custom_drawer_controller.dart';
 
@@ -89,6 +90,11 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {}),
               listTileItem(
                   title: "Recorrido", iconPath: Iconos.recorrido, onTap: () {}),
+              listTileItem(title: "Comentarios y Sugerencias", iconPath: Iconos.comentarios,
+                  onTap: (){
+                    // controller.handleIndexChanged(8);
+                    Get.toNamed(Routes.quejasSugerencias);
+                  }),
               const Divider(),
               listTileItem(
                   title: "Configuración",

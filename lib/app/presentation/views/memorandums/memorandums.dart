@@ -1,11 +1,9 @@
 import 'package:comunidad_delmor/app/data/models/memorandums_model.dart';
 import 'package:comunidad_delmor/utils/iconos.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/memorandums_model.dart';
-import '../pdf/pdfView.dart';
 import 'memorandums_controller.dart';
 
 class Memorandums extends StatelessWidget {
@@ -40,17 +38,6 @@ class Memorandums extends StatelessWidget {
                             subtitle:
                                 Text(circular.fechaEmision),
                             onTap: () {
-                              // Get.to(() => Pdf(
-                              //     initialPath: controller.memorandums[index].url));
-
-                              // Get.to(Perfil2());
-
-
-                              // if (controller.remotePDFpath.isNotEmpty)
-                              //   Get.to(Pdf2(
-                              //     path: controller.remotePDFpath.toString(),
-                              //   ));
-
                               controller.verPdf(circular);
                             },
                             enableFeedback: true,

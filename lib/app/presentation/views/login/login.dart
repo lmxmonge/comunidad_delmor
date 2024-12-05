@@ -6,9 +6,6 @@ import 'package:lottie/lottie.dart';
 class Login extends StatelessWidget {
   Login({super.key});
 
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -16,32 +13,31 @@ class Login extends StatelessWidget {
     return Scaffold(
       drawerScrimColor: Colors.transparent,
       body: Container(
-          //gradiente
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colores.backgroundLogin,
-                Colores.backgroundLogin2,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colores.backgroundLogin,
+              Colores.backgroundLogin2,
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: SizedBox(
+            width: double.infinity,
+            height: size.height + 15,
+            child: Column(
+              children: [
+                headerLogin(size: size),
+                const SizedBox(height: 15),
+                const BoodyLogin(
+                ),
               ],
             ),
           ),
-          child: SingleChildScrollView(
-            child: SizedBox(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height + 15,
-              child: Column(
-                children: [
-                  headerLogin(size: size),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  BoodyLogin(formKey: formKey),
-                ],
-              ),
-            ),
-          )),
+        ),
+      ),
     );
   }
 
@@ -51,7 +47,6 @@ class Login extends StatelessWidget {
         SizedBox(
           height: size!.height * 0.33,
           width: 300,
-          // child: rive.RiveAnimation.asset('lib/assets/animations/people.riv',useArtboardSize:true),
           child: Lottie.asset('lib/assets/animations/people3.json'),
         ),
         const Text(
