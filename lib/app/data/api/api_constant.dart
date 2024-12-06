@@ -5,4 +5,6 @@ class ApiConstant {
   static String isLogged = 'getUserLogueado';
   static String loginEndpoint = 'Login';
 
+  static double versionApp = 1.0;
+
 }

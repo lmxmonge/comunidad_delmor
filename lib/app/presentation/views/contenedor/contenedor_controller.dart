@@ -1,29 +1,20 @@
-import 'package:comunidad_delmor/app/data/models/user_model.dart';
-import 'package:comunidad_delmor/app/data/services/api_service.dart';
-import 'package:comunidad_delmor/app/data/services/preferencesService.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../global_widgets/custom_drawer_controller/custom_drawer_controller.dart';
+import '../../../../utils/enlace_utils.dart';
+import '../../../data/api/api_constant.dart';
+import '../../../data/repositories/api_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContenedorController extends GetxController {
-  final ApiService apiService = Get.find<ApiService>();
-  final PreferencesService preferencesService = Get.find<PreferencesService>();
+  final ApiRespository respository;
 
-  final CustomDrawerController customDrawer =
-      Get.find<CustomDrawerController>();
+  ContenedorController(this.respository);
 
   @override
   void onInit() {
-    getUserData();
-    fetchDatosLaborales();
+    EnlaceUtils.actualizarAppDialogo();
     super.onInit();
   }
-
-  Future<dynamic> getUserData() async {
-    UserModel preferences = await preferencesService.getUser();
-
-    print("Hola mundo: " + preferences.username);
-  }
-
-  void fetchDatosLaborales() {}
 }

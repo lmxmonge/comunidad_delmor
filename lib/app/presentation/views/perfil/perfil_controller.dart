@@ -1,7 +1,10 @@
 import 'package:comunidad_delmor/app/data/models/datos_laborales_model.dart';
 import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../data/api/api_constant.dart';
 
 class PerfilController extends GetxController {
   final ApiRespository respository;

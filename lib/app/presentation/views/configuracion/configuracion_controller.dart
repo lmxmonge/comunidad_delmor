@@ -1,4 +1,5 @@
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,7 +75,9 @@ class ConfiguracionController extends GetxController {
   Future<void> cerrarSession() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-
+    // Eliminar el token del dispositivo
+    await FirebaseMessaging.instance.deleteToken();
+    print('Token de FCM eliminado.');
     Get.back();
     Get.offAllNamed(Routes.splash);
   }

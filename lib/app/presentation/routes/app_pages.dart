@@ -9,6 +9,8 @@ import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums_
 import 'package:comunidad_delmor/app/presentation/views/notificaciones/notificaciones_bindig.dart';
 import 'package:comunidad_delmor/app/presentation/views/pdf/pdf_web_view.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
+import 'package:comunidad_delmor/utils/custom_transicion.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../views/boletin_informativo/boletin_informativo_binding.dart';
@@ -29,7 +31,7 @@ class AppPages {
   static const initial = Routes.splash; // Ruta inicial
 
   static final routes = [
-    GetPage(name: _Paths.contenedor, page: () => const Contenedor(), bindings: [
+    GetPage(name: _Paths.contenedor, page: () => Contenedor(), bindings: [
       NotificacionesBinding(),
       PerfilBinding(),
       CumpleaniosBinding(),
@@ -37,15 +39,14 @@ class AppPages {
       CircularesBinding(),
       MemorandumsBinding(),
       BoletinInformativoBinding(),
+      ContenedorBinding(),
     ]),
     GetPage(name: _Paths.home, page: () => HomeView()),
     GetPage(name: _Paths.other, page: () => const OtherView()),
-    // GetPage(
-    //   name: _Paths.perfil,
-    //   page: () => Perfil(),
-    //   binding: PerfilBinding(),
-    // ),
+
     GetPage(
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 300),
       name: _Paths.login,
       page: () => Login(),
       binding: LoginBinding(),
@@ -57,9 +58,14 @@ class AppPages {
     ),
 
     GetPage(
+      // transition: Transition.leftToRight,
+      transitionDuration: const Duration(milliseconds: 300),
       name: _Paths.quejasSugerencias,
       page: () => QuejasSugerencias(),
       binding: QuejasSugerenciasBinding(),
+      opaque: true,
+      customTransition: CustomTransicion(),
+
     ),
     // GetPage(name: _Paths.pdf, page: () => PdfWebView())
   ];

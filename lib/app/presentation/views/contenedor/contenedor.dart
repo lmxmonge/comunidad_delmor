@@ -30,29 +30,19 @@ final _bodyContent = [
 ];
 
 class Contenedor extends StatelessWidget {
-  const Contenedor({super.key});
+  Contenedor({super.key});
 
-  // //iniciar el contenedorCOntroller
-  // final ContenedorController contenedorController = Get.put(ContenedorController());
-  // Inyectamos el controlador de Perfil
-  // final perfilController = Get.put(PerfilController(Get.find<ApiRespository>()));
+  final ContenedorController controller = Get.find<ContenedorController>();
 
   @override
   Widget build(BuildContext context) {
     final NotificationsController controller = Get.find();
-
     return GetBuilder<CustomDrawerController>(
         id: "navbar",
         init: CustomDrawerController(),
         builder: (_) {
           return Scaffold(
               drawer: const CustomDrawer(),
-              // floatingActionButton: FloatingActionButton(
-              //   onPressed: () {
-              //     Get.toNamed(Routes.other);
-              //   },
-              //   child: const Icon(Icons.add),
-              // ),
               appBar: AppBar(
                 title: appBarTitle(_.selectedIndex),
                 actions: [iconosActionAppBar(_.selectedIndex)],
@@ -84,8 +74,8 @@ class Contenedor extends StatelessWidget {
         return const Text("Memorandums");
       case 5: // Otro
         return const Text("Boletín Informativo");
-        // case 8:
-        // return const Text("Hacer un comentario");
+      // case 8:
+      // return const Text("Hacer un comentario");
       default:
         return const Text("Perfil");
     }

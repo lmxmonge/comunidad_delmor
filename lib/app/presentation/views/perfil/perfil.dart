@@ -1,7 +1,6 @@
 import 'package:comunidad_delmor/app/presentation/global_widgets/sin_conexion/sin_conexion.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil_controller.dart';
 import 'package:comunidad_delmor/utils/iconos.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

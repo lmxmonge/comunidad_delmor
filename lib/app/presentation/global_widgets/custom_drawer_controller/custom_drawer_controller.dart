@@ -1,5 +1,6 @@
 import 'package:comunidad_delmor/app/presentation/routes/app_pages.dart';
 import 'package:comunidad_delmor/utils/constantes.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,8 +33,11 @@ class CustomDrawerController extends GetxController {
               onPressed: () async {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
-                prefs.remove(Constantes.isLogged);
+                prefs.clear();
 
+                // Eliminar el token del dispositivo
+                await FirebaseMessaging.instance.deleteToken();
+                print('Token de FCM eliminado.');
                 Get.back();
                 Get.offAllNamed(Routes.splash);
               },
@@ -42,5 +46,4 @@ class CustomDrawerController extends GetxController {
       );
     });
   }
-
 }

@@ -11,7 +11,6 @@ class QuejasSugerencias extends StatelessWidget {
   final QuejasSugerenciasController controller =
       Get.find<QuejasSugerenciasController>();
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -21,10 +20,11 @@ class QuejasSugerencias extends StatelessWidget {
             : Scaffold(
                 appBar: AppBar(
                   title: const Text('Quejas y Sugerencias'),
-                  actions: [
-                  ],
+                  actions: [],
                 ),
-                body: _buildBody(),
+                body: SingleChildScrollView(
+                  child: _buildBody(),
+                ),
               ),
       );
     });
@@ -36,22 +36,22 @@ class QuejasSugerencias extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Obx(() {
-          return   TextField(
-            controller: controller.editingController.value,
-            textAlignVertical: TextAlignVertical.top,
-            textAlign: TextAlign.start,
-            maxLines: 5,
-            decoration: InputDecoration(
-              errorText: controller.textFielErrorText.value.isEmpty
-                  ? null
-                  : controller.textFielErrorText.value,
-              floatingLabelAlignment: FloatingLabelAlignment.start,
-              border: const OutlineInputBorder(),
-              labelText: 'Escribe tu comentario',
-            ),
-          );
-        }),
+          Obx(() {
+            return TextField(
+              controller: controller.editingController.value,
+              textAlignVertical: TextAlignVertical.top,
+              textAlign: TextAlign.start,
+              maxLines: 2,
+              decoration: InputDecoration(
+                errorText: controller.textFielErrorText.value.isEmpty
+                    ? null
+                    : controller.textFielErrorText.value,
+                floatingLabelAlignment: FloatingLabelAlignment.start,
+                border: const OutlineInputBorder(),
+                labelText: 'Escribe tu comentario',
+              ),
+            );
+          }),
           const SizedBox(height: 15),
           const Text(
             'Tipo de comentario',
@@ -65,6 +65,7 @@ class QuejasSugerencias extends StatelessWidget {
             return Column(
               children: TipoComentarioEnum.values.map((tipo) {
                 return RadioListTile<TipoComentarioEnum>(
+                  activeColor: Colors.deepPurple,
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                   title: Text(tipo.name.capitalizeFirst!),
