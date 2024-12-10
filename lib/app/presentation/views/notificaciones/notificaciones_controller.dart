@@ -19,7 +19,7 @@ class NotificationsController extends GetxController {
       repository.listenToMessages(
         onMessage: (RemoteMessage message) {
           messageTitle.value = message.notification?.title ?? "Sin título";
-          print("Notificación recibida: ${message.notification?.title}");
+          print("Notificación recibida  primer plano: ${message.notification?.title}");
         },
         // onMessageOpenedApp: (RemoteMessage message) {
         //   print("Notificación abierta: ${message.notification?.title}");

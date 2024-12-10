@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:comunidad_delmor/app/data/models/boletin_informativo_model.dart';
 import 'package:comunidad_delmor/app/data/models/circulares_model.dart';
