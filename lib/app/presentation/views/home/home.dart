@@ -14,7 +14,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       Scaffold(
-      drawer: const CustomDrawer(),
+      drawer:  CustomDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.toNamed(Routes.other);

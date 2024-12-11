@@ -18,9 +18,12 @@ class NotificacionesRepository {
 
   void listenToMessages({
     required Function(RemoteMessage) onMessage,
+    required Function(RemoteMessage) onMessageBackground,
     // required Function(RemoteMessage) onMessageOpenedApp,
   }) {
     _firebaseService.onMessage(onMessage);
+    // _firebaseService.onMessageBackground(onMessageBackground);
+
     // _firebaseService.onMessageOpenedApp(onMessageOpenedApp);
   }
 

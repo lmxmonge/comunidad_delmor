@@ -5,12 +5,15 @@ import 'package:get/get.dart';
 import '../../../../utils/iconos.dart';
 import '../../routes/app_pages.dart';
 import '../../views/notificaciones/notificaciones_controller.dart';
+import '../list_drawer_item/dart/list_drawer_item.dart';
 import 'custom_drawer_controller.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  CustomDrawer({super.key});
 
-  // final CustomDrawerController controller = Get.put(CustomDrawerController(),tag: "navbar",);
+  final NotificationsController notificationsController =
+      Get.find<NotificationsController>();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CustomDrawerController>(
@@ -40,13 +43,29 @@ class CustomDrawer extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              listTileItem(
+
+              // Obx((){
+              //   return ListTile(
+              //     title: Text("count: ${notificationsController.count.value}"),
+              //   );
+              // }),
+              // Obx(() {
+              //   return notificationsController.notificationCounts.value['memoramdums'] == 0
+              //       || notificationsController.notificationCounts.value['memoramdums'] == null
+              //
+              //       ? Container() :
+              //   ListTile(
+              //     title: Text(
+              //         "Notificaciones  ${notificationsController.notificationCounts.value['memoramdums'] ?? 0}"),
+              //   );
+              // }),,
+              ListDrawerItem(
                   iconPath: Iconos.userColor,
                   title: 'Perfil',
                   onTap: () {
                     controller.handleIndexChanged(0);
                   }),
-              listTileItem(
+              ListDrawerItem(
                   title: "Cumpleañeros",
                   iconPath: Iconos.cakeColor,
                   onTap: () {
@@ -63,20 +82,23 @@ class CustomDrawer extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              listTileItem(
+              ListDrawerItem(
                   title: "Circulares",
                   iconPath: Iconos.catalogo,
                   onTap: () {
                     controller.handleIndexChanged(3);
                   },
                   hasNotification: true),
-              listTileItem(
-                  title: "Memorandums",
-                  iconPath: Iconos.memorandos,
-                  onTap: () {
-                    controller.handleIndexChanged(4);
-                  }),
-              listTileItem(
+              ListDrawerItem(
+                hasNotification: true,
+                tipoNotificacion: "memoramdums",
+                title: "memoramdums",
+                iconPath: Iconos.memorandos,
+                onTap: () {
+                  controller.handleIndexChanged(4);
+                },
+              ),
+              ListDrawerItem(
                 title: "Boletín Informativo",
                 iconPath: Iconos.boletin,
                 onTap: () {
@@ -85,26 +107,26 @@ class CustomDrawer extends StatelessWidget {
                 hasNotification: true,
               ),
               const Divider(),
-              listTileItem(
+              ListDrawerItem(
                   title: "Saldo Comisariato",
                   iconPath: Iconos.comisariato,
                   onTap: () {}),
-              listTileItem(
+              ListDrawerItem(
                   title: "Recorrido", iconPath: Iconos.recorrido, onTap: () {}),
-              listTileItem(
+              ListDrawerItem(
                   title: "Comentarios y Sugerencias",
                   iconPath: Iconos.comentarios,
                   onTap: () {
                     Get.toNamed(Routes.quejasSugerencias);
                   }),
               const Divider(),
-              listTileItem(
+              ListDrawerItem(
                   title: "Configuración",
                   iconPath: Iconos.configuraciones,
                   onTap: () {
                     controller.handleIndexChanged(2);
                   }),
-              listTileItem(
+              ListDrawerItem(
                   title: "Cerrar Sesión",
                   iconPath: Iconos.cerrarSesion,
                   onTap: () {
@@ -118,52 +140,4 @@ class CustomDrawer extends StatelessWidget {
   }
 }
 
-ListTile listTileItem({
-  required String title,
-  required String? iconPath,
-  required Function onTap,
-  bool hasNotification = false,
-}) {
-  return ListTile(
-    leading: Stack(
-      alignment: Alignment.center,
-      children: [
-        const SizedBox(
-          width: Tamanios.iconSizeDrawer + 5,
-          height: Tamanios.iconSizeDrawer + 30,
-          // decoration:
-          // BoxDecoration(color: Colors.grey[200], shape: BoxShape.circle),
-        ),
-        Positioned(
-          left: 0,
-          child: Image.asset(iconPath!,
-              width: Tamanios.iconSizeDrawer, height: Tamanios.iconSizeDrawer),
-        ),
-        hasNotification
-            ? Positioned(
-                top: 10,
-                right: 0,
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: const BoxDecoration(
-                      color: Colors.red, shape: BoxShape.circle),
-                  child: const Center(
-                      child: Text(
-                    "2",
-                    style: TextStyle(color: Colors.white, fontSize: 8),
-                  )),
-                ),
-              )
-            : const SizedBox(
-                width: 0,
-                height: 0,
-              )
-      ],
-    ),
-    title: Text(title),
-    onTap: () {
-      onTap();
-    },
-  );
-}
+

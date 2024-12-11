@@ -10,4 +10,12 @@ class Constantes {
   static String password = 'password';
 
   static String token = 'token';
+
+  static String cumpleanios = 'cumpleanios';
+
+  static String boletin = 'boletin';
+
+  static String notificacion = 'notificacion';
+
+  static String memoramdums  = 'memoramdums';
 }

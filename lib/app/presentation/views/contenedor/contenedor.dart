@@ -42,7 +42,7 @@ class Contenedor extends StatelessWidget {
         init: CustomDrawerController(),
         builder: (_) {
           return Scaffold(
-              drawer: const CustomDrawer(),
+              drawer:  CustomDrawer(),
               appBar: AppBar(
                 title: appBarTitle(_.selectedIndex),
                 actions: [iconosActionAppBar(_.selectedIndex)],

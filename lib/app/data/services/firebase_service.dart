@@ -87,6 +87,22 @@ class FirebaseService {
     await service._showNotification(message); // Mostrar la notificación
 
     // Si necesitas hacer algo más, puedes agregarlo aquí
+    // callback(message);
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    switch (message.data['type']) {
+      case 'memoramdums':
+        await prefs.setInt(Constantes.cumpleanios, (prefs.getInt(Constantes.cumpleanios) ?? 0) + 1);
+        break;
+      case 'boletines':
+        await prefs.setInt(Constantes.boletin, (prefs.getInt(Constantes.boletin) ?? 0) + 1);
+        break;
+      case 'circulares':
+        await prefs.setInt(Constantes.notificacion, (prefs.getInt(Constantes.notificacion) ?? 0) + 1);
+        break;
+      default:
+    }
   }
 
   // Mostrar notificación con flutter_local_notifications
@@ -177,6 +193,13 @@ class FirebaseService {
  });
 
   }
+
+  //  onMessageBackground(Function(RemoteMessage p1) onMessageBackground) {
+  //   FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+  //     print('Mensaje en segundo plano: ${message.notification?.title}');
+  //     await _showNotification(message);
+  //     callback(message);
+  // }
 
   // void showSimpleNotification({
   //   required String title,
