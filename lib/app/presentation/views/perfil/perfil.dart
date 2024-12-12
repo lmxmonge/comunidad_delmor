@@ -136,11 +136,15 @@ class Perfil extends StatelessWidget {
             title: "Vacaciones",
             content:
                 controller.datosLaborales.value?.vacacionesDisponibles ?? ''),
-        boodyItem(controller,
-            iconPath: Iconos.salario,
-            title: "Salario",
-            content: controller.datosLaborales.value?.salario ?? ''),
-        //
+        boodyItem(
+          controller,
+          iconPath: Iconos.salario,
+          title: "Salario",
+          content: controller.datosLaborales.value?.salario != null
+              ? double.parse(controller.datosLaborales.value!.salario)
+                  .toStringAsFixed(2)
+              : '',
+        ), //
         // boodyItem(controller,
         //     iconPath: Iconos.areaDeTrabajo,
         //     title: "Salario",

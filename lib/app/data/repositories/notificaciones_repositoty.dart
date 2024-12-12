@@ -18,24 +18,21 @@ class NotificacionesRepository {
 
   void listenToMessages({
     required Function(RemoteMessage) onMessage,
-    required Function(RemoteMessage) onMessageBackground,
-    // required Function(RemoteMessage) onMessageOpenedApp,
+    required Function(RemoteMessage) onMessageOpenedApp,
   }) {
     _firebaseService.onMessage(onMessage);
     // _firebaseService.onMessageBackground(onMessageBackground);
 
-    // _firebaseService.onMessageOpenedApp(onMessageOpenedApp);
+    _firebaseService.onMessageOpenedApp((RemoteMessage message) {
+       // print('A new onMessageOpenedApp event was published!');
+    });
   }
 
   Future<String> enviarToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final codigoSap = prefs.getString(Constantes.codigoSap) ?? '';
-    final token = prefs.getString(Constantes.token) ?? '';
     late final String respuesta;
 
     try {
-      respuesta = await _apiService.sendTokenToServer(token, codigoSap);
+      respuesta = await _apiService.sendTokenToServer();
       print('respuesta enviarToken: $respuesta');
     } catch (e) {
       throw Exception(e);

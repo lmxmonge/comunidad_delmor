@@ -1,4 +1,5 @@
 import 'package:comunidad_delmor/app/presentation/views/quejas_sugerencias/quejas_sugerencias.dart';
+import 'package:comunidad_delmor/utils/constantes.dart';
 import 'package:comunidad_delmor/utils/tamanios.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class CustomDrawer extends StatelessWidget {
     return GetBuilder<CustomDrawerController>(
       builder: (controller) {
         return Drawer(
+
           child: ListView(
             children: [
               DrawerHeader(
@@ -83,28 +85,37 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               ListDrawerItem(
-                  title: "Circulares",
-                  iconPath: Iconos.catalogo,
-                  onTap: () {
-                    controller.handleIndexChanged(3);
-                  },
-                  hasNotification: true),
+                hasNotification: true,
+                tipoNotificacion: Constantes.circulares,
+                title: "Circulares",
+                iconPath: Iconos.catalogo,
+                onTap: () {
+                  notificationsController
+                      .limpiarBadgeNotificacion(Constantes.circulares);
+                  controller.handleIndexChanged(3);
+                },
+              ),
               ListDrawerItem(
                 hasNotification: true,
-                tipoNotificacion: "memoramdums",
+                tipoNotificacion: Constantes.memoramdums,
                 title: "memoramdums",
                 iconPath: Iconos.memorandos,
                 onTap: () {
+                  notificationsController
+                      .limpiarBadgeNotificacion(Constantes.memoramdums);
                   controller.handleIndexChanged(4);
                 },
               ),
               ListDrawerItem(
+                hasNotification: true,
+                tipoNotificacion: Constantes.boletines,
                 title: "Boletín Informativo",
                 iconPath: Iconos.boletin,
                 onTap: () {
+                  notificationsController
+                      .limpiarBadgeNotificacion(Constantes.boletines);
                   controller.handleIndexChanged(5);
                 },
-                hasNotification: true,
               ),
               const Divider(),
               ListDrawerItem(
@@ -139,5 +150,3 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 }
-
-

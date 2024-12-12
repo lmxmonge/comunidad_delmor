@@ -16,6 +16,7 @@ class ApiResponse {
 
       // Validar si contiene las claves necesarias
       if (json.containsKey('status') && json.containsKey('message')) {
+
         return ApiResponse(
           status: json['status'] as String,
           message: json['message'] as String,

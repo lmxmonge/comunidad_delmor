@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
 import 'package:comunidad_delmor/app/data/models/quejas_sugerencias_model.dart';
+import 'package:comunidad_delmor/utils/constantes.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_connect.dart' as getConnect;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/api_constant.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +33,7 @@ abstract class ApiService {
   Future<dynamic> enviarComentario(DatosUsuarioModel? datosUsuario,
       QuejasSugerenciasModel? quejasSugerencias);
 
-  Future<dynamic> sendTokenToServer(String token, String userSap);
+  Future<dynamic> sendTokenToServer();
 
   String _manejarRespuestaPost(http.Response response);
 }
@@ -38,8 +43,14 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   Future<dynamic> fetchDatosDaborales({required String userSap}) async {
     try {
       // Realizar la solicitud HTTP GET
-      var response = await http
-          .get(Uri.parse('${ApiConstant.baseUrl}/datosLaborales/$userSap'));
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+      var response = await http.post(
+          Uri.parse('${ApiConstant.baseUrlCesar}/datosLaborales/$userSap'),
+          headers: {
+            'Authorization': 'Bearer ${accesTocken}',
+          });
 
       if (response.statusCode == 200) {
         // Si la respuesta es exitosa (código 200), parsear el JSON
@@ -58,8 +69,14 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchCumpleanieros() async {
     try {
-      var response =
-          await http.get(Uri.parse('${ApiConstant.baseUrl}/Cumpleanieros'));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
+      var response = await http.post(
+          Uri.parse('${ApiConstant.baseUrlCesar}/Cumpleanieros'),
+          headers: {
+            'Authorization': 'Bearer ${accesTocken}',
+          });
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
@@ -75,9 +92,13 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchDatosUsuario({required String userSap}) async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
       // Realizar la solicitud HTTP GET
-      var response = await http
-          .get(Uri.parse('${ApiConstant.baseUrl}/getUserData/$userSap'));
+      var response = await http.post(
+          Uri.parse('${ApiConstant.baseUrlCesar}/getUserData/$userSap'),
+          headers: {'Authorization': 'Bearer ${accesTocken}'});
 
       if (response.statusCode == 200) {
         // Si la respuesta es exitosa (código 200), parsear el JSON
@@ -134,24 +155,6 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   }
 
   @override
-  String _manejarRespuestaPost(http.Response response) {
-    try {
-      if (response.body.isEmpty) {
-        throw Exception(
-            "Error al procesar la respuesta: ${response.reasonPhrase}");
-      }
-      final apiResponse = ApiResponse.fromJson(response.body);
-
-      if (apiResponse.status == 'error') throw Exception(apiResponse.message);
-
-      return apiResponse.message;
-    } on Exception catch (e) {
-      print("Error al procesar la respuesta: $e");
-      throw Exception("$e");
-    }
-  }
-
-  @override
   Future fetchBoletinesInformativos() async {
     try {
       var response = await http
@@ -203,31 +206,34 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   }
 
   @override
-  Future<String> sendTokenToServer(String token, String userSap) async {
+  Future<String> sendTokenToServer() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final codigoSap = prefs.getString(Constantes.codigoSap) ?? '';
+    final tokenAndroid = prefs.getString(Constantes.tokenAndroid) ?? '';
+    final tokenWeb = prefs.getString(Constantes.tokenWeb) ?? '';
+
     final url =
-        '${ApiConstant.baseUrl}/guardarToken'; // Cambia esta URL por la URL de tu servidor PHP
+        '${ApiConstant.baseUrlCesar}/guardarToken'; // Cambia esta URL por la URL de tu servidor PHP
 
     // Cuerpo del JSON que se enviará
     var jsonBody = jsonEncode({
       'data': [
         {
-          "codigoSAP": userSap,
-          "token": token,
+          "codigoSAP": codigoSap,
+          "tokenAndroid": tokenAndroid,
+          "tokenWeb": tokenWeb
         }
       ]
     });
     print("Body: $jsonBody");
-    print("URL: ${ApiConstant.baseUrl}/cambiarPassword");
+    print("URL: ${ApiConstant.baseUrlCesar}/cambiarPassword");
 
     try {
       final response = await http.post(
         Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: {
-          'json': jsonBody,
-        },
+        headers: {'Content-Type': 'application/json'},
+        body: jsonBody,
       );
 
       return _manejarRespuestaPost(response);
@@ -273,6 +279,55 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
       return _manejarRespuestaPost(response);
     } catch (e) {
       print("Error en la solicitud: $e");
+      throw Exception("$e");
+    }
+  }
+
+  @override
+  String _manejarRespuestaPost(http.Response response) {
+    try {
+      if (response.body.isEmpty) {
+        throw Exception(
+            "Error al procesar la respuesta: ${response.reasonPhrase}");
+      }
+      print("Status code: ${response.statusCode} ");
+      //revisar si el status es diferente a 200
+
+      final apiResponse = ApiResponse.fromJson(response.body);
+
+      if (response.statusCode != 200) {
+        throw HttpException("${response.statusCode}  ${apiResponse.message}");
+      }
+
+      if (apiResponse.status != 'success') throw Exception(apiResponse.message);
+
+      return apiResponse.message;
+    } on HttpException catch (e) {
+      print("entro en http exception");
+
+      var mensaje = e.message.split(':').last.trim();
+      Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
+        return AlertDialog(
+          title: const Text('Advertencia'),
+          content: Text('$mensaje'),
+          icon: const Icon(
+            Icons.error,
+            color: Colors.red,
+            size: 48.0,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('Cerrar'),
+            ),
+          ],
+        );
+      });
+      throw HttpException("$e");
+    } on Exception catch (e) {
+      print("Error al procesar la respuesta: $e");
       throw Exception("$e");
     }
   }

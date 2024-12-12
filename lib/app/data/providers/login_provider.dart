@@ -6,11 +6,12 @@ class LoginProvider extends GetConnect {
   // Método para iniciar sesión
   Future<Response> login(String username, String password) {
     final body = {
-      'username': username,
+      'nombre_usuario': username,
       'password': password,
     };
 
-    return get('${ApiConstant.baseUrl}/${ApiConstant.loginEndpoint}/$username/$password');
+    return post(
+        '${ApiConstant.baseUrlCesar}/${ApiConstant.loginEndpoint}', body);
   }
 
   Future<Response> estaLogueado(String username) {

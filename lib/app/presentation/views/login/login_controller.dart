@@ -58,7 +58,7 @@ class LoginController extends GetxController {
         return;
       }
 
-      Map<String, dynamic> data = jsonDecode(response.body);
+     var data = response.body;
 
       if (data['user'] != true || data['user'] == null) {
         errorMessage.value = 'Usuario o contraseña incorrectos';

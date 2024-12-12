@@ -34,6 +34,8 @@ class PerfilController extends GetxController {
     try {
       datosLaborales.value = await respository.fetchDatosLaborales();
 
+// datosLaborales.value?.salario = double.parse(datosLaborales.value?.salario).toStringAsFixed(2);
+
       print("datos:  ${datosLaborales.value}");
     } finally {}
   }

@@ -20,7 +20,6 @@ class ListDrawerItem extends StatelessWidget {
       this.hasNotification = false,
       this.tipoNotificacion});
 
-  // ${controllers.notificationCounts.value['memoramdums'] ?? 0}
   @override
   Widget build(BuildContext context) {
     final NotificationsController controllers =

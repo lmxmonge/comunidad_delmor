@@ -9,13 +9,22 @@ class Constantes {
 
   static String password = 'password';
 
-  static String token = 'token';
+  static String tokenAndroid = 'token';
 
   static String cumpleanios = 'cumpleanios';
 
-  static String boletin = 'boletin';
+  static String boletines = 'boletines';
+  static String memoramdums  = 'memoramdums';
+  static String circulares = 'circulares';
 
   static String notificacion = 'notificacion';
 
-  static String memoramdums  = 'memoramdums';
+  static String accesTocken = 'accesTocken';
+
+  static String status = 'status';
+
+  static String logged = 'logged';
+
+  static String tokenWeb = 'tokenWeb';
+
 }

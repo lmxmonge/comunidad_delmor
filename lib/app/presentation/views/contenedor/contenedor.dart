@@ -6,6 +6,7 @@ import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../main.dart';
 import '../../../data/repositories/api_repository.dart';
 import '../../../data/services/api_service.dart';
 import '../../routes/app_pages.dart';
@@ -33,7 +34,6 @@ class Contenedor extends StatelessWidget {
   Contenedor({super.key});
 
   final ContenedorController controller = Get.find<ContenedorController>();
-
   @override
   Widget build(BuildContext context) {
     final NotificationsController controller = Get.find();
@@ -42,7 +42,8 @@ class Contenedor extends StatelessWidget {
         init: CustomDrawerController(),
         builder: (_) {
           return Scaffold(
-              drawer:  CustomDrawer(),
+            key: scaffoldKey,
+              drawer: CustomDrawer(),
               appBar: AppBar(
                 title: appBarTitle(_.selectedIndex),
                 actions: [iconosActionAppBar(_.selectedIndex)],

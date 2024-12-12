@@ -42,12 +42,21 @@ class LoginRepositoryImpl implements ILoginRepository {
     String username = data['username'] ?? '';
     String password = data['password'] ?? '';
 
+    int logged = data['logged'] ?? '';
+    String token = data['accessToken'] ?? '';
+    bool status = data['status'] ?? '';
+
     await prefs.setBool(Constantes.user, user);
     await prefs.setString(Constantes.idUsuario, idUsuario.toString());
     await prefs.setString(Constantes.codigoSap, codigoSap.toString());
     await prefs.setBool(Constantes.isLogged, true);
     await prefs.setString(Constantes.userName, username);
     await prefs.setString(Constantes.password, password);
+
+    await prefs.setInt(Constantes.logged, logged);
+    await prefs.setString(Constantes.accesTocken, token);
+    await prefs.setBool(Constantes.status, status);
+
   }
 
   @override
