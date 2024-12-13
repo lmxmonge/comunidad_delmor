@@ -32,8 +32,15 @@ final Rx<TextEditingController> editingController = TextEditingController().obs;
     if (editingController.value.text.isEmpty) {
       textFielErrorText.value = "Este campo no puede estar vacío";
     } else {
-      textFielErrorText.value = "";
 
+      quejasSugerencias.value = QuejasSugerenciasModel(
+        tipo: tipoComentario.value == TipoComentarioEnum.queja ? 'Queja' : 'Sugerencia',
+        comentario: editingController.value.text,
+        fecha: DateTime.now().toString(),
+      );
+
+
+      textFielErrorText.value = "";
       editingController.value.text = "";
       enviarComentario();
     }
@@ -80,8 +87,8 @@ final Rx<TextEditingController> editingController = TextEditingController().obs;
     } catch (e) {
 
       cerrarBarraProgreso();
-      respuesta = e.toString().split(':').last.trim();
-      dialogo(respuesta, true);
+      // respuesta = e.toString().split(':').last.trim();
+      // dialogo(respuesta, true);
     }
   }
 

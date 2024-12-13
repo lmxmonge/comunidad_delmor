@@ -1,4 +1,6 @@
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
+import 'package:comunidad_delmor/app/presentation/views/boletin_informativo/boletin_informativo_controller.dart';
+import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums_controller.dart';
 import 'package:comunidad_delmor/utils/constantes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:universal_html/html.dart';
 
 import '../../../../main.dart';
 import '../../../data/repositories/notificaciones_repositoty.dart';
+import '../circulares/circulares_controller.dart';
 
 class NotificationsController extends GetxController {
   final NotificacionesRepository repository;
@@ -18,6 +21,13 @@ class NotificationsController extends GetxController {
   final count = 0.obs;
 
   NotificationsController(this.repository);
+
+  final CircularesController circularesController =
+      Get.find<CircularesController>();
+  final MemorandumsController memorandumsController =
+      Get.find<MemorandumsController>();
+  final BoletinInformativoController boletinInformativoController =
+      Get.find<BoletinInformativoController>();
 
   @override
   Future<void> onInit() async {
@@ -47,6 +57,18 @@ class NotificationsController extends GetxController {
               notificationCounts[type] =
                   (notificationCounts.value[type] ?? 0) + 1;
               print("Notificaciones: ${notificationCounts[type]} ");
+            }
+
+            switch (message.data['type']) {
+              case 'memoramdums':
+                memorandumsController.fetchMemorandums();
+                break;
+              case 'circulares':
+                circularesController.fetchCirculares();
+                break;
+              case 'boletines':
+                circularesController.fetchCirculares();
+                break;
             }
           },
           onMessageOpenedApp: (RemoteMessage) {
@@ -111,8 +133,9 @@ class NotificationsController extends GetxController {
 
   void abrirDrawer() {
     // Future.delayed(const Duration(seconds: 1), () {
-      if (scaffoldKey.currentState?.isDrawerOpen == false) scaffoldKey.currentState?.openDrawer();
-      print('Abriendo el drawer d');
+    if (scaffoldKey.currentState?.isDrawerOpen == false)
+      scaffoldKey.currentState?.openDrawer();
+    print('Abriendo el drawer d');
     // });
   }
 }

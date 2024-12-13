@@ -27,33 +27,38 @@ class Memorandums extends StatelessWidget {
         child: controller.isLoading.value
             ? const LinearProgressIndicator()
             : controller.memorandums.isNotEmpty
-                ? ListView.builder(
-                    itemCount: controller.memorandums.length,
-                    itemBuilder: (context, index) {
-                      MemorandumsModel circular = controller.memorandums[index];
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(circular.nombre),
-                            subtitle:
-                                Text(circular.fechaEmision),
-                            onTap: () {
-                              controller.verPdf(circular);
-                            },
-                            enableFeedback: true,
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            isThreeLine: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 10),
-                          ),
-                          const Divider(
-                            indent: 8,
-                            endIndent: 8,
-                          ),
-                        ],
-                      );
-                    },
-                  )
+                ? RefreshIndicator(
+          onRefresh: (){
+            return controller.fetchMemorandums();
+          },
+                  child: ListView.builder(
+                      itemCount: controller.memorandums.length,
+                      itemBuilder: (context, index) {
+                        MemorandumsModel circular = controller.memorandums[index];
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(circular.nombre),
+                              subtitle:
+                                  Text(circular.fechaEmision),
+                              onTap: () {
+                                controller.verPdf(circular);
+                              },
+                              enableFeedback: true,
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              isThreeLine: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 10),
+                            ),
+                            const Divider(
+                              indent: 8,
+                              endIndent: 8,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                )
                 : Container(),
       );
     });

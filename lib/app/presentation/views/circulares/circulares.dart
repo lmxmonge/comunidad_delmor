@@ -8,8 +8,7 @@ import 'circulares_controller.dart';
 class Circulares extends StatelessWidget {
   Circulares({super.key});
 
-  final CircularesController controller =
-      Get.find<CircularesController>();
+  final CircularesController controller = Get.find<CircularesController>();
 
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _repeatPasswordController =
@@ -23,32 +22,36 @@ class Circulares extends StatelessWidget {
         child: controller.isLoading.value
             ? const LinearProgressIndicator()
             : controller.circulares.isNotEmpty
-                ? ListView.builder(
-                    itemCount: controller.circulares.length,
-                    itemBuilder: (context, index) {
-                      CircularesModel circular = controller.circulares[index];
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(circular.nombre),
-                            subtitle:
-                                Text(circular.fechaEmision),
-                            onTap: () {
-                              controller.verPdf(circular);
-                            },
-                            enableFeedback: true,
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            isThreeLine: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 10),
-                          ),
-                          const Divider(
-                            indent: 8,
-                            endIndent: 8,
-                          ),
-                        ],
-                      );
+                ? RefreshIndicator(
+                    onRefresh: () {
+                      return controller.fetchCirculares();
                     },
+                    child: ListView.builder(
+                      itemCount: controller.circulares.length,
+                      itemBuilder: (context, index) {
+                        CircularesModel circular = controller.circulares[index];
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(circular.nombre),
+                              subtitle: Text(circular.fechaEmision),
+                              onTap: () {
+                                controller.verPdf(circular);
+                              },
+                              enableFeedback: true,
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              isThreeLine: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 10),
+                            ),
+                            const Divider(
+                              indent: 8,
+                              endIndent: 8,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   )
                 : Container(),
       );

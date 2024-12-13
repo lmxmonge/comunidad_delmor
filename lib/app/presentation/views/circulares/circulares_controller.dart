@@ -26,11 +26,9 @@ class CircularesController extends GetxController {
   void onInit() {
     super.onInit();
 
-    isLoading(true);
 
-    fetchCirculares().then((value) {
-      isLoading(false);
-    });
+
+    fetchCirculares();
   }
 
   verPdf(CircularesModel model) {
@@ -81,10 +79,17 @@ class CircularesController extends GetxController {
 
   Future<void> fetchCirculares() async {
     try {
-      circulares.value = await respository.fetchCirculares();
+      isLoading(true);
 
-      // print("datos circulares:  ${circulares.first.url}");
+      circulares.value = await respository.fetchCirculares().then((value) {
+        isLoading(false);
+        return value;
+      });
+
     } catch (e) {
+      isLoading(false);
+      var mensaje = e.toString().split(':').last.trim();
+      dialogo(mensaje, true, tittle: 'Advertencia');
       print(e);
     }
   }

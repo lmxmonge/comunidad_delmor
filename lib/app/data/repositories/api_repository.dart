@@ -137,9 +137,10 @@ class ApiRespository {
 
     try {
       respuesta = await _apiService.enviarComentario(value, quejasSugerencias.value);
+      return respuesta;
+
     } on Exception catch (e,s) {
       throw Exception(e);
     }
-    return respuesta;
   }
 }

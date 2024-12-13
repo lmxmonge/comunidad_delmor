@@ -26,33 +26,38 @@ class BoletinInformativo extends StatelessWidget {
         child: controller.isLoading.value
             ? const LinearProgressIndicator()
             : controller.boletines.isNotEmpty
-                ? ListView.builder(
-                    itemCount: controller.boletines.length,
-                    itemBuilder: (context, index) {
-                      BoletinIformativoModel boletin = controller.boletines[index];
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(boletin.nombre),
-                            subtitle:
-                                Text(boletin.fechaEmision),
-                            onTap: () {
-                              controller.verPdf(boletin);
-                            },
-                            enableFeedback: true,
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            isThreeLine: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 10),
-                          ),
-                          const Divider(
-                            indent: 8,
-                            endIndent: 8,
-                          ),
-                        ],
-                      );
+                ? RefreshIndicator(
+                    onRefresh: () {
+                      return controller.fetchBoletines();
                     },
-                  )
+                  child: ListView.builder(
+                      itemCount: controller.boletines.length,
+                      itemBuilder: (context, index) {
+                        BoletinIformativoModel boletin = controller.boletines[index];
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(boletin.nombre),
+                              subtitle:
+                                  Text(boletin.fechaEmision),
+                              onTap: () {
+                                controller.verPdf(boletin);
+                              },
+                              enableFeedback: true,
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              isThreeLine: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 10),
+                            ),
+                            const Divider(
+                              indent: 8,
+                              endIndent: 8,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                )
                 : Container(),
       );
     });

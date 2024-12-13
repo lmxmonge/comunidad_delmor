@@ -26,75 +26,76 @@ class BoletinInformativoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    isLoading(true);
-
-    fetchBoletines().then((value) {
-      isLoading(false);
-    });
+    fetchBoletines();
   }
 
   verPdf(BoletinIformativoModel model) {
     isLoading(true);
-
     try {
-      Get.to(
-        ()=>
-          PdfWebView(
-        url: model.url,
-        title: model.nombre,
-      ));
+      Get.to(() => PdfWebView(
+            url: model.url,
+            title: model.nombre,
+          ));
       isLoading(false);
       return;
     } catch (e) {
-      dialogo('Error al procesar el archivo!', true, tittle: 'Error');
+      dialogo('Error al procesar el archivo!', true, titulo: 'Error');
       isLoading(false);
     }
   }
 
-  Future<File> createFileOfPdfUrl(BoletinIformativoModel boletin) async {
-    remotePDFpath.value = "";
-
-    Completer<File> completer = Completer();
-    print("Start download file from internet!");
-    try {
-      // "https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
-      // final url = "https://pdfkit.org/docs/guide.pdf";
-      // final url = "http://www.pdf995.com/samples/pdf.pdf";
-      final url = boletin.url;
-
-      final filename = url.substring(url.lastIndexOf("/") + 1);
-      var request = await HttpClient().getUrl(Uri.parse(url));
-      var response = await request.close();
-      var bytes = await consolidateHttpClientResponseBytes(response);
-      var dir = await getApplicationDocumentsDirectory();
-      print("Download files");
-      print("${dir.path}/$filename");
-      File file = File("${dir.path}/$filename");
-
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      print("entro1: ");
-      throw Exception('Error al procesar el archivo!');
-    }
-
-    return completer.future;
-  }
+  //
+  // Future<File> createFileOfPdfUrl(BoletinIformativoModel boletin) async {
+  //   remotePDFpath.value = "";
+  //
+  //   Completer<File> completer = Completer();
+  //   print("Start download file from internet!");
+  //   try {
+  //     // "https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
+  //     // final url = "https://pdfkit.org/docs/guide.pdf";
+  //     // final url = "http://www.pdf995.com/samples/pdf.pdf";
+  //     final url = boletin.url;
+  //
+  //     final filename = url.substring(url.lastIndexOf("/") + 1);
+  //     var request = await HttpClient().getUrl(Uri.parse(url));
+  //     var response = await request.close();
+  //     var bytes = await consolidateHttpClientResponseBytes(response);
+  //     var dir = await getApplicationDocumentsDirectory();
+  //     print("Download files");
+  //     print("${dir.path}/$filename");
+  //     File file = File("${dir.path}/$filename");
+  //
+  //     await file.writeAsBytes(bytes, flush: true);
+  //     completer.complete(file);
+  //   } catch (e) {
+  //     print("entro1: ");
+  //     throw Exception('Error al procesar el archivo!');
+  //   }
+  //
+  //   return completer.future;
+  // }
 
   Future<void> fetchBoletines() async {
     try {
-      boletines.value = await respository.fetchBoletinesInformativos();
+      isLoading(true);
 
-      // print("datos boletines:  ${boletines.first.url}");
+      boletines.value =
+          await respository.fetchBoletinesInformativos().then((value) {
+        isLoading(false);
+        return value;
+      });
     } catch (e) {
+      isLoading(false);
+      var mensaje = e.toString().split(':').last.trim();
+      dialogo(mensaje, true, titulo: 'Advertencia');
+
       print(e);
     }
   }
 
   void iniciarPdf() {}
 
-  void dialogo(String s, bool error, {required String tittle}) {
+  void dialogo(String s, bool error, {required String titulo}) {
     Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
       return AlertDialog(
         icon: Icon(
@@ -102,7 +103,7 @@ class BoletinInformativoController extends GetxController {
           color: error ? Colors.red : Colors.green,
           size: 48.0,
         ),
-        title: Text(tittle),
+        title: Text(titulo),
         content: Text(s),
         actions: [
           TextButton(

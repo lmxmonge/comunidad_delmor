@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -35,7 +36,8 @@ abstract class ApiService {
 
   Future<dynamic> sendTokenToServer();
 
-  String _manejarRespuestaPost(http.Response response);
+  Future<String> _manejarRespuestaPost(http.Response response,
+      {bool showDialog = true});
 }
 
 class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
@@ -236,7 +238,7 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
         body: jsonBody,
       );
 
-      return _manejarRespuestaPost(response);
+      return _manejarRespuestaPost(response, showDialog: false);
     } catch (e) {
       print("Error en la solicitud: $e");
       throw Exception("Error al intentar enviar el token");
@@ -249,6 +251,9 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
     var fecha = DateFormat('yyyy-MM-dd').format(DateTime.now());
     quejasSugerencias?.fecha = fecha;
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
     var jsonBody = jsonEncode({
       'data': [
         {
@@ -257,78 +262,102 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
           "area": datosUsuario?.area,
           "comentario": quejasSugerencias?.comentario,
           "tipo": quejasSugerencias?.tipo,
-          "fecha": quejasSugerencias?.fecha,
+          "fecha": fecha,
         }
       ]
     });
 
-    print("Body enviarComentario: $jsonBody");
-
     try {
       // Realizar la solicitud POST usando el paquete http
       final response = await http.post(
-        Uri.parse('${ApiConstant.baseUrl}/guardarComentarios'),
+        Uri.parse('${ApiConstant.baseUrlCesar}/guardarSugerencias'),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${accesTocken}',
         },
-        body: {
-          'json': jsonBody,
-        },
+        body: jsonBody,
       );
 
       return _manejarRespuestaPost(response);
     } catch (e) {
-      print("Error en la solicitud: $e");
+      print("$e");
       throw Exception("$e");
     }
   }
 
   @override
-  String _manejarRespuestaPost(http.Response response) {
+  Future<String> _manejarRespuestaPost(http.Response response,
+      {bool showDialog = true}) async {
     try {
       if (response.body.isEmpty) {
         throw Exception(
             "Error al procesar la respuesta: ${response.reasonPhrase}");
       }
       print("Status code: ${response.statusCode} ");
-      //revisar si el status es diferente a 200
 
+      // Revisar si el status es diferente a 200
       final apiResponse = ApiResponse.fromJson(response.body);
 
       if (response.statusCode != 200) {
-        throw HttpException("${response.statusCode}  ${apiResponse.message}");
+        throw HttpException("${apiResponse.message}");
       }
 
-      if (apiResponse.status != 'success') throw Exception(apiResponse.message);
+      if (apiResponse.status != 'success') {
+        throw Exception(apiResponse.message);
+      }
 
       return apiResponse.message;
     } on HttpException catch (e) {
-      print("entro en http exception");
-
       var mensaje = e.message.split(':').last.trim();
-      Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
-        return AlertDialog(
-          title: const Text('Advertencia'),
-          content: Text('$mensaje'),
-          icon: const Icon(
-            Icons.error,
-            color: Colors.red,
-            size: 48.0,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: Text('Cerrar'),
-            ),
-          ],
-        );
-      });
-      throw HttpException("$e");
+
+      if (!showDialog) throw Exception("$mensaje");
+
+      // Usamos un Completer para esperar la acción del usuario
+      final completer = Completer<void>();
+      dialogo(
+        mensaje,
+        true,
+        titulo: 'Avertencia',
+        onTap: () {
+          Get.back();
+          completer.complete(); // Marca la acción como completada
+        },
+      );
+      await completer
+          .future; // Espera hasta que se llame a `completer.complete()`
+      throw Exception("$mensaje");
     } on Exception catch (e) {
       print("Error al procesar la respuesta: $e");
-      throw Exception("$e");
+      return "Error: $e";
     }
+  }
+
+  void dialogo(String mensaje, bool hasErrorIcon,
+      {required String titulo, required VoidCallback onTap}) {
+    Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
+      return AlertDialog(
+        title: Text(titulo),
+        content: Text('$mensaje'),
+        icon: hasErrorIcon == true
+            ? const Icon(
+                Icons.error,
+                color: Colors.red,
+                size: 48.0,
+              )
+            : const Icon(
+                Icons.check,
+                color: Colors.green,
+                size: 48.0,
+              ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              onTap();
+            },
+            child: Text('Cerrar'),
+          ),
+        ],
+      );
+    });
   }
 }

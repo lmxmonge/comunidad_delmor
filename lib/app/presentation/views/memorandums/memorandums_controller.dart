@@ -27,16 +27,11 @@ class MemorandumsController extends GetxController {
   void onInit() {
     super.onInit();
 
-    isLoading(true);
-
-    fetchMemorandums().then((value) {
-      isLoading(false);
-    });
+    fetchMemorandums();
   }
 
   verPdf(MemorandumsModel model) {
     isLoading(true);
-
     try {
       Get.to(() => PdfWebView(
             url: model.url,
@@ -45,52 +40,58 @@ class MemorandumsController extends GetxController {
       isLoading(false);
       return;
     } catch (e) {
-      dialogo('Error al procesar el archivo!', true, tittle: 'Error');
+      dialogo('Error al procesar el archivo!', true, titulo: 'Error');
       isLoading(false);
     }
   }
 
-  Future<File> createFileOfPdfUrl(MemorandumsModel memorandum) async {
-    remotePDFpath.value = "";
-
-    Completer<File> completer = Completer();
-    print("Start download file from internet!");
-    try {
-      // "https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
-      // final url = "https://pdfkit.org/docs/guide.pdf";
-      // final url = "http://www.pdf995.com/samples/pdf.pdf";
-      final url = memorandum.url;
-
-      final filename = url.substring(url.lastIndexOf("/") + 1);
-      var request = await HttpClient().getUrl(Uri.parse(url));
-      var response = await request.close();
-      var bytes = await consolidateHttpClientResponseBytes(response);
-      var dir = await getApplicationDocumentsDirectory();
-      print("Download files");
-      print("${dir.path}/$filename");
-      File file = File("${dir.path}/$filename");
-
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      print("entro1: ");
-      throw Exception('Error al procesar el archivo!');
-    }
-
-    return completer.future;
-  }
+  // Future<File> createFileOfPdfUrl(MemorandumsModel memorandum) async {
+  //   remotePDFpath.value = "";
+  //
+  //   Completer<File> completer = Completer();
+  //   print("Start download file from internet!");
+  //   try {
+  //     // "https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
+  //     // final url = "https://pdfkit.org/docs/guide.pdf";
+  //     // final url = "http://www.pdf995.com/samples/pdf.pdf";
+  //     final url = memorandum.url;
+  //
+  //     final filename = url.substring(url.lastIndexOf("/") + 1);
+  //     var request = await HttpClient().getUrl(Uri.parse(url));
+  //     var response = await request.close();
+  //     var bytes = await consolidateHttpClientResponseBytes(response);
+  //     var dir = await getApplicationDocumentsDirectory();
+  //     print("Download files");
+  //     print("${dir.path}/$filename");
+  //     File file = File("${dir.path}/$filename");
+  //
+  //     await file.writeAsBytes(bytes, flush: true);
+  //     completer.complete(file);
+  //   } catch (e) {
+  //     print("entro1: ");
+  //     throw Exception('Error al procesar el archivo!');
+  //   }
+  //
+  //   return completer.future;
+  // }
 
   Future<void> fetchMemorandums() async {
     try {
-      memorandums.value = await respository.fetchMemorandums();
+      isLoading(true);
+      memorandums.value = await respository.fetchMemorandums().then((value) {
+        isLoading(false);
+        return value;
+      });
 
-      // print("datos memorandums:  ${memorandums.first.url}");
     } catch (e) {
+      isLoading(false);
+      var mensaje = e.toString().split(':').last.trim();
+      dialogo(mensaje, true, titulo: 'Avertencia');
       print(e);
     }
   }
 
-  void dialogo(String s, bool error, {required String tittle}) {
+  void dialogo(String s, bool error, {required String titulo}) {
     Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
       return AlertDialog(
         icon: Icon(
@@ -98,7 +99,7 @@ class MemorandumsController extends GetxController {
           color: error ? Colors.red : Colors.green,
           size: 48.0,
         ),
-        title: Text(tittle),
+        title: Text(titulo),
         content: Text(s),
         actions: [
           TextButton(
