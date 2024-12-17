@@ -17,9 +17,7 @@ class BoletinInformativo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Obtén el controlador usando Get.find() para que sea inyectado previamente por BoletinInformativoBinding
 
-    // return Center(child: const Text('No se encontraron datos'));
     return Obx(() {
       return Container(
         decoration: BoxDecoration(),
@@ -30,16 +28,21 @@ class BoletinInformativo extends StatelessWidget {
                     onRefresh: () {
                       return controller.fetchBoletines();
                     },
-                  child: ListView.builder(
+                    child: ListView.builder(
                       itemCount: controller.boletines.length,
                       itemBuilder: (context, index) {
-                        BoletinIformativoModel boletin = controller.boletines[index];
+                        BoletinIformativoModel boletin =
+                            controller.boletines[index];
                         return Column(
                           children: [
                             ListTile(
+                              leading: Image.asset(
+                                Iconos.pdf,
+                                height: 50,
+                                width: 50,
+                              ),
                               title: Text(boletin.nombre),
-                              subtitle:
-                                  Text(boletin.fechaEmision),
+                              subtitle: Text(boletin.fechaEmision),
                               onTap: () {
                                 controller.verPdf(boletin);
                               },
@@ -57,23 +60,9 @@ class BoletinInformativo extends StatelessWidget {
                         );
                       },
                     ),
-                )
+                  )
                 : Container(),
       );
     });
-  }
-
-  boody(BoletinInformativoController controller) {
-    var tituloEstilo = const TextStyle(
-      fontSize: 19,
-      fontWeight: FontWeight.bold,
-    );
-    return const Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-      ],
-    );
   }
 }

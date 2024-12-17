@@ -38,6 +38,7 @@ class Memorandums extends StatelessWidget {
                         return Column(
                           children: [
                             ListTile(
+                              leading: Image.asset(Iconos.pdf, height: 50, width: 50,),
                               title: Text(circular.nombre),
                               subtitle:
                                   Text(circular.fechaEmision),

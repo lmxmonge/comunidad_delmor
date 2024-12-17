@@ -36,6 +36,8 @@ abstract class ApiService {
 
   Future<dynamic> sendTokenToServer();
 
+  Future<dynamic> chekActualizaciones();
+
   Future<String> _manejarRespuestaPost(http.Response response,
       {bool showDialog = true});
 }
@@ -159,11 +161,20 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchBoletinesInformativos() async {
     try {
-      var response = await http
-          .get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfBoletinAjax'));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
+      var response = await http.post(
+          Uri.parse(
+            '${ApiConstant.baseUrlCesar}/getBoletines',
+          ),
+          headers: {
+            'Authorization': 'Bearer ${accesTocken}',
+          });
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
+        print(" Boletines: " + response.body);
         return jsonData;
       } else {
         return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
@@ -359,5 +370,32 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
         ],
       );
     });
+  }
+
+  @override
+  Future chekActualizaciones() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
+    try {
+      // Realizar la solicitud HTTP GET
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+      var response = await http.post(
+          Uri.parse('${ApiConstant.baseUrlCesar}/checkActualizaciones/'),
+          headers: {
+            'Authorization': 'Bearer ${accesTocken}',
+          });
+
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        return jsonData;
+      } else {
+        return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
   }
 }

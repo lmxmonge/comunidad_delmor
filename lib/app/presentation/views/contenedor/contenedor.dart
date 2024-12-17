@@ -3,7 +3,9 @@ import 'package:comunidad_delmor/app/presentation/views/configuracion/configurac
 import 'package:comunidad_delmor/app/presentation/views/cumpleanios/cumpleanios.dart';
 import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums.dart';
 import 'package:comunidad_delmor/app/presentation/views/perfil/perfil.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../../main.dart';
@@ -34,6 +36,7 @@ class Contenedor extends StatelessWidget {
   Contenedor({super.key});
 
   final ContenedorController controller = Get.find<ContenedorController>();
+
   @override
   Widget build(BuildContext context) {
     final NotificationsController controller = Get.find();
@@ -41,23 +44,55 @@ class Contenedor extends StatelessWidget {
         id: "navbar",
         init: CustomDrawerController(),
         builder: (_) {
-          return Scaffold(
-            key: scaffoldKey,
-              drawer: CustomDrawer(),
-              appBar: AppBar(
-                title: appBarTitle(_.selectedIndex),
-                actions: [iconosActionAppBar(_.selectedIndex)],
-              ),
-              body: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: MyPageView(
-                        currentPage: _.selectedIndex,
-                        children: _bodyContent.map((item) => item).toList()),
+          return WillPopScope(
+              onWillPop: () async {
+                if (scaffoldKey.currentState!.isDrawerOpen) {
+                  scaffoldKey.currentState!.openEndDrawer();
+                  return false;
+                }
+
+                if (!kIsWeb) {
+                  Get.generalDialog(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                    return AlertDialog(
+                      title: const Text('¿Desea salir de la aplicación?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text('Cancelar'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            SystemNavigator.pop();
+                          },
+                          child: const Text('Salir'),
+                        ),
+                      ],
+                    );
+                  });
+                }
+                return false;
+              },
+              child: Scaffold(
+                  key: scaffoldKey,
+                  drawer: CustomDrawer(),
+                  appBar: AppBar(
+                    title: appBarTitle(_.selectedIndex),
+                    actions: [iconosActionAppBar(_.selectedIndex)],
                   ),
-                ],
-              ));
+                  body: Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: MyPageView(
+                            currentPage: _.selectedIndex,
+                            children:
+                                _bodyContent.map((item) => item).toList()),
+                      ),
+                    ],
+                  )));
         });
   }
 

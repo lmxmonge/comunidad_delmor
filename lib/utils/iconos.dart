@@ -46,4 +46,7 @@ class Iconos {
   ///Configuracion
 
   static const candado = '${_path}candado.png';
+
+  //Circulares
+  static const pdf = '${_path}pdf.png';
 }

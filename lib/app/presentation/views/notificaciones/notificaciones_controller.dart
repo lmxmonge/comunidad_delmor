@@ -67,7 +67,7 @@ class NotificationsController extends GetxController {
                 circularesController.fetchCirculares();
                 break;
               case 'boletines':
-                circularesController.fetchCirculares();
+                boletinInformativoController.fetchBoletines();
                 break;
             }
           },
