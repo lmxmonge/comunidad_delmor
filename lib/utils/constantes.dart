@@ -27,4 +27,7 @@ class Constantes {
 
   static String tokenWeb = 'tokenWeb';
 
+  static String versionAppQuemada = "V1.0.0";
+  static double codigoInternoLocal = 4;
+
 }

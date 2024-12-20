@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:comunidad_delmor/app/data/api/api_constant.dart';
+import 'package:comunidad_delmor/app/data/models/actualizacion_model.dart';
+import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
 import 'package:comunidad_delmor/app/data/repositories/login_repository.dart';
+import 'package:comunidad_delmor/utils/constantes.dart';
 import 'package:comunidad_delmor/utils/enlace_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +15,31 @@ import '../../routes/app_pages.dart';
 class LoginController extends GetxController {
   @override
   void onInit() {
-    EnlaceUtils.actualizarAppDialogo();
+    checkActualizaciones();
     super.onInit();
   }
 
   final ILoginRepository _loginRepository;
 
-  LoginController(this._loginRepository);
+  final ApiRespository respository;
+
+  LoginController(this._loginRepository, this.respository);
+
+  var actualizacion = ActualizacionModel(
+          version: Constantes.versionAppQuemada, codigoInterno: 1, url: '')
+      .obs;
 
   var isLoading = false.obs;
   var errorMessage = ''.obs;
+
+  Future<void> checkActualizaciones() async {
+    await respository.checkActualizaciones().then((value) {
+      actualizacion.value = value;
+
+      EnlaceUtils.actualizarAppDialogo(
+          codigoInternoApi: actualizacion.value.codigoInterno, url: actualizacion.value.url);
+    });
+  }
 
   // Método para manejar el login
   Future<void> estaLogueado(String username, String password) async {
@@ -58,7 +76,7 @@ class LoginController extends GetxController {
         return;
       }
 
-     var data = response.body;
+      var data = response.body;
 
       if (data['user'] != true || data['user'] == null) {
         errorMessage.value = 'Usuario o contraseña incorrectos';

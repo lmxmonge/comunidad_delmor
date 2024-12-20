@@ -1,8 +1,11 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+import '../../../../utils/constantes.dart';
 import '../../routes/app_pages.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -27,6 +30,22 @@ class _PdfWebViewState extends State<PdfWebView> {
     pdfController.zoomLevel = 1.0; // Zoom inicial
 
     print('URL: ${widget.url}');
+
+    estaLogueado();
+  }
+
+  Future<void> estaLogueado() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var estaLogueado = prefs.getBool(Constantes.user) ?? false;
+
+    if (!estaLogueado) {
+      prefs.clear();
+      // Eliminar el token del dispositivo
+      await FirebaseMessaging.instance.deleteToken();
+      print('Token de FCM eliminado.');
+      Get.back();
+      Get.offAllNamed(Routes.splash);
+    }
   }
 
   @override

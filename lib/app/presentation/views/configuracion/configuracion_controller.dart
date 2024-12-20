@@ -1,3 +1,4 @@
+import 'package:comunidad_delmor/app/data/models/contrasenia_model.dart';
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,14 @@ class ConfiguracionController extends GetxController {
 
   ConfiguracionController(this.respository);
 
+  var antigaContraseniaVisibility = false.obs;
+
   var passwordVisivility = false.obs;
   var repeatPasswordVisivility = false.obs;
+
+  void changeAntiguaPasswordVisibility() {
+    antigaContraseniaVisibility.value = !antigaContraseniaVisibility.value;
+  }
 
   void changePasswordVisibility() {
     passwordVisivility.value = !passwordVisivility.value;
@@ -22,7 +29,7 @@ class ConfiguracionController extends GetxController {
     repeatPasswordVisivility.value = !repeatPasswordVisivility.value;
   }
 
-  void changePassword(String text) async {
+  void changePassword(ContraseniaModel contraseniaModel) async {
     Get.back(); // Cerrar el diálogo.
 
     //mostrar barra de progreso
@@ -34,7 +41,7 @@ class ConfiguracionController extends GetxController {
 
     late final String respuesta;
     try {
-      respuesta = await respository.cambiarContrasenia(text);
+      respuesta = await respository.cambiarContrasenia(contraseniaModel);
     } catch (e) {
       cerrarBarraProgreso();
       respuesta = 'Error: $e';
@@ -81,30 +88,46 @@ class ConfiguracionController extends GetxController {
     Get.back();
     Get.offAllNamed(Routes.splash);
   }
-  RxString newPasswordError = ''.obs; // Inicializar con cadena vacía
-  RxString repeatPasswordError = ''.obs; // Inicializar con cadena vacía
 
-  void validateAndSubmit(TextEditingController newPasswordController,
-      TextEditingController repeatPasswordController) {
+  RxString newPasswordError = ''.obs; // Inicializar con cadena vacía
+  RxString repeatPasswordError = ''.obs;
+
+  RxString antigaContraseniaError = ''.obs;
+
+  void validateAndSubmit(
+    TextEditingController newPasswordController,
+    TextEditingController repeatPasswordController,
+    TextEditingController antigaContraseniaController,
+  ) {
+    antigaContraseniaError.value = antigaContraseniaController.text.isEmpty
+        ? "La contraseña antigua es obligatoria"
+        : '';
+
     newPasswordError.value = newPasswordController.text.isEmpty
         ? "La nueva contraseña es obligatoria"
         : newPasswordController.text.length < 3
-        ? "Debe tener al menos 3 caracteres"
-        : '';
+            ? "Debe tener al menos 3 caracteres"
+            : '';
 
     repeatPasswordError.value = repeatPasswordController.text.isEmpty
         ? "Repetir contraseña es obligatorio"
         : repeatPasswordController.text != newPasswordController.text
-        ? "Las contraseñas no coinciden"
-        : '';
+            ? "Las contraseñas no coinciden"
+            : '';
 
     if (newPasswordError.value.isEmpty && repeatPasswordError.value.isEmpty) {
+
+      ContraseniaModel contraseniaModel = ContraseniaModel(
+        contrasenia: newPasswordController.text,
+        antiguaContrasenia: antigaContraseniaController.text,
+      );
+
       repeatPasswordController.clear();
       newPasswordController.clear();
 
-      changePassword(newPasswordController.text);
+
+      changePassword(contraseniaModel);
       Get.back(); // Cerrar el diálogo
     }
   }
-
 }

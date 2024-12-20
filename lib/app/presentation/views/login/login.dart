@@ -3,6 +3,8 @@ import 'package:comunidad_delmor/utils/colores.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../../utils/constantes.dart';
+
 class Login extends StatelessWidget {
   Login({super.key});
 
@@ -65,9 +67,9 @@ class Login extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const Text(
-          "v2.0.0",
-          style: TextStyle(
+         Text(
+          Constantes.versionAppQuemada,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,

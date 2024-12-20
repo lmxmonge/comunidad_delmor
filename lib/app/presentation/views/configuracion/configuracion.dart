@@ -14,6 +14,8 @@ class Configuracion extends StatelessWidget {
   final TextEditingController _repeatPasswordController =
       TextEditingController();
 
+  final TextEditingController _antguaContraseniaController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // Obtén el controlador usando Get.find() para que sea inyectado previamente por ConfiguracionBinding
@@ -112,6 +114,35 @@ class Configuracion extends StatelessWidget {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text("Ingrese su Antigua Contraseña"),
+                  const SizedBox(height: 5),
+
+                  Obx(
+                        () => TextField(
+                      controller: _antguaContraseniaController,
+                      obscureText: !controller.antigaContraseniaVisibility.value,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: "Antigua Contraseña",
+                        errorText: controller.antigaContraseniaError.value.isEmpty
+                            ? null
+                            : controller.antigaContraseniaError.value,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.antigaContraseniaVisibility.value
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: controller.changeAntiguaPasswordVisibility,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  Text("Nueva Contraseña"),
+                  const SizedBox(height: 5),
+
                   Obx(
                     () => TextField(
                       controller: _newPasswordController,
@@ -167,7 +198,7 @@ class Configuracion extends StatelessWidget {
             TextButton(
               onPressed: () {
                 controller.validateAndSubmit(
-                    _newPasswordController, _repeatPasswordController);
+                    _newPasswordController, _repeatPasswordController, _antguaContraseniaController);
               },
               child: const Text("Aceptar"),
             ),

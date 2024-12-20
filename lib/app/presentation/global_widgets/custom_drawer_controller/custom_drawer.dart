@@ -45,22 +45,6 @@ class CustomDrawer extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-
-              // Obx((){
-              //   return ListTile(
-              //     title: Text("count: ${notificationsController.count.value}"),
-              //   );
-              // }),
-              // Obx(() {
-              //   return notificationsController.notificationCounts.value['memoramdums'] == 0
-              //       || notificationsController.notificationCounts.value['memoramdums'] == null
-              //
-              //       ? Container() :
-              //   ListTile(
-              //     title: Text(
-              //         "Notificaciones  ${notificationsController.notificationCounts.value['memoramdums'] ?? 0}"),
-              //   );
-              // }),,
               ListDrawerItem(
                   iconPath: Iconos.userColor,
                   title: 'Perfil',

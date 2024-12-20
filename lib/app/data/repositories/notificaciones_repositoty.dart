@@ -1,6 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../utils/constantes.dart';
 import '../services/api_service.dart';
 import '../services/firebase_service.dart';
 

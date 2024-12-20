@@ -1,4 +1,3 @@
-import 'package:comunidad_delmor/app/data/models/user_model.dart';
 import 'package:get/get.dart';
 
 import '../providers/login_provider.dart';

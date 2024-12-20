@@ -2,9 +2,13 @@ import 'dart:async';
 
 import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../utils/constantes.dart';
 import '../../../data/models/quejas_sugerencias_model.dart';
+import '../../routes/app_pages.dart';
 
 enum TipoComentarioEnum { queja, sugerencia }
 
@@ -49,6 +53,7 @@ final Rx<TextEditingController> editingController = TextEditingController().obs;
   @override
   void onInit() {
     super.onInit();
+    estaLogueado();
 
     isLoading(true);
 
@@ -116,5 +121,19 @@ final Rx<TextEditingController> editingController = TextEditingController().obs;
 
   void cerrarBarraProgreso() {
     Get.back();
+  }
+
+  Future<void> estaLogueado() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var estaLogueado = prefs.getBool(Constantes.user) ?? false;
+
+    if (!estaLogueado) {
+      prefs.clear();
+      // Eliminar el token del dispositivo
+      await FirebaseMessaging.instance.deleteToken();
+      print('Token de FCM eliminado.');
+      Get.back();
+      Get.offAllNamed(Routes.splash);
+    }
   }
 }

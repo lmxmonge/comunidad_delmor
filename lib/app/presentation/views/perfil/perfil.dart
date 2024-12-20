@@ -109,14 +109,14 @@ class Perfil extends StatelessWidget {
             iconPath: Iconos.fechaInicio,
             title: "Fecha de Ingreso",
             content: controller.datosLaborales.value?.fechaDeIngreso ?? ''),
+        // boodyItem(controller,
+        //     iconPath: Iconos.fechaInicio,
+        //     title: "Meses de Servicio",
+        //     content: controller.datosLaborales.value?.mesesDeServicio ?? ''),
         boodyItem(controller,
             iconPath: Iconos.fechaInicio,
-            title: "Meses de Servicio",
-            content: controller.datosLaborales.value?.mesesDeServicio ?? ''),
-        boodyItem(controller,
-            iconPath: Iconos.fechaInicio,
-            title: "Años de Servicio",
-            content: controller.datosLaborales.value?.aniosDeServicio ?? ''),
+            title: "Tiempo de Servicio",
+            content: formatearTiempoDeServicio(controller)),
         Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Align(
@@ -128,21 +128,17 @@ class Perfil extends StatelessWidget {
           ),
         ),
         boodyItem(controller,
-            iconPath: Iconos.areaDeTrabajo,
-            title: "Área",
-            content: controller.datosLaborales.value?.area ?? ''),
-        boodyItem(controller,
             iconPath: Iconos.vacaciones,
             title: "Vacaciones",
             content:
-                controller.datosLaborales.value?.vacacionesDisponibles ?? ''),
+            controller.datosLaborales.value?.vacacionesDisponibles ?? ''),
         boodyItem(
           controller,
           iconPath: Iconos.salario,
           title: "Salario",
           content: controller.datosLaborales.value?.salario != null
               ? double.parse(controller.datosLaborales.value!.salario)
-                  .toStringAsFixed(2)
+              .toStringAsFixed(2)
               : '',
         ), //
         // boodyItem(controller,
@@ -158,8 +154,8 @@ class Perfil extends StatelessWidget {
 
   boodyItem(PerfilController controller,
       {required String iconPath,
-      required String title,
-      required String content}) {
+        required String title,
+        required String content}) {
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -204,7 +200,7 @@ class Perfil extends StatelessWidget {
   ocupacion(PerfilController controller) {
     return Container(
       width: double.infinity,
-      height: 100,
+      // height: 100,
       padding: const EdgeInsets.all(5),
       child: Card(
         color: Color(0xff4C9F83),
@@ -214,21 +210,56 @@ class Perfil extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                "Ocupación",
+                "Area",
                 style: TextStyle(color: Colors.white),
+              ),
+              Text(
+                controller.datosLaborales.value?.area ?? '',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
               const SizedBox(
                 height: 8,
               ),
+              const Text(
+                "Cargo",
+                style: TextStyle(color: Colors.white),
+              ),
+
               Text(
                 controller.datosLaborales.value?.ocupcacion ?? '',
                 style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
+              const SizedBox(
+                height: 8,
+              ),
+
             ],
           ),
         ),
       ),
     );
+  }
+
+  formatearTiempoDeServicio(PerfilController controller) {
+    var meses = controller.datosLaborales.value?.mesesDeServicio ?? '0';
+    var anios = controller.datosLaborales.value?.aniosDeServicio ?? '0';
+
+    if (meses == '0' && anios == '0') {
+      return '0 Meses';
+    }
+    else if (anios == '0' && meses != '0') {
+      return '$meses Meses';
+    }
+    else if (meses == '0' && anios != '0') {
+      return '$anios Años';
+    }
+    else if (meses != '0' && anios != '0') {
+      return '$anios Años y $meses Meses';
+    }
+    else {
+      return '0 Meses';
+    }
   }
 }

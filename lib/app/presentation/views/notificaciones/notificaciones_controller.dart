@@ -1,5 +1,6 @@
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
 import 'package:comunidad_delmor/app/presentation/views/boletin_informativo/boletin_informativo_controller.dart';
+import 'package:comunidad_delmor/app/presentation/views/contenedor/contenedor_controller.dart';
 import 'package:comunidad_delmor/app/presentation/views/memorandums/memorandums_controller.dart';
 import 'package:comunidad_delmor/utils/constantes.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,8 @@ class NotificationsController extends GetxController {
       Get.find<MemorandumsController>();
   final BoletinInformativoController boletinInformativoController =
       Get.find<BoletinInformativoController>();
+
+  final ContenedorController contenedorController = Get.find<ContenedorController>();
 
   @override
   Future<void> onInit() async {
@@ -68,6 +71,10 @@ class NotificationsController extends GetxController {
                 break;
               case 'boletines':
                 boletinInformativoController.fetchBoletines();
+                break;
+              case 'actualizacion':
+                print('Entro en Actualización de la app');
+                contenedorController.checkActualizaciones();
                 break;
             }
           },

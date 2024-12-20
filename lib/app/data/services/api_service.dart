@@ -23,7 +23,7 @@ abstract class ApiService {
 
   Future<dynamic> fetchCumpleanieros();
 
-  Future<dynamic> cambiarContrasenia(String text, String codigoSap);
+  Future<dynamic> cambiarContrasenia(Map<String, dynamic> json);
 
   Future<dynamic> fetchBoletinesInformativos();
 
@@ -119,31 +119,42 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   }
 
   @override
-  Future<String> cambiarContrasenia(String text, String codigoSap) async {
+  Future<String> cambiarContrasenia(Map<String, dynamic> json) async {
     // Formatear la fecha como 'YYYY-MM-DD'
     var fecha = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     // Cuerpo del JSON que se enviará
+    // var jsonBody = jsonEncode({
+    //   'data': [
+    //     {
+    //       "codigoSAP": codigoSap,
+    //       "password": text,
+    //       "fecha": fecha,
+    //     }
+    //   ]
+    // });
+
     var jsonBody = jsonEncode({
       'data': [
         {
-          "codigoSAP": codigoSap,
-          "password": text,
-          "fecha": fecha,
+          json,
         }
       ]
     });
 
     print("Body: $jsonBody");
-    print("URL: ${ApiConstant.baseUrl}/cambiarPassword");
+    print("URL: ${ApiConstant.baseUrlCesar}/cambiarPassword");
 
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
       // Realizar la solicitud POST usando el paquete http
       final response = await http.post(
         Uri.parse('${ApiConstant.baseUrl}/cambiarPassword'),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          // Tipo de contenido
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${accesTocken}',
         },
         body: {
           'json': jsonBody, // Enviar el JSON como campo de formulario
@@ -187,8 +198,16 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchCirculares({required String userSap}) async {
     try {
-      var response = await http
-          .get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfAjax/$userSap'));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
+      var response = await http.post(
+          Uri.parse(
+            '${ApiConstant.baseUrlCesar}/getCirculares/$userSap',
+          ),
+          headers: {
+            'Authorization': 'Bearer ${accesTocken}',
+          });
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
@@ -204,8 +223,16 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchMemorandums({required String userSap}) async {
     try {
-      var response = await http
-          .get(Uri.parse('${ApiConstant.baseUrl}/mostrarPdfMemoAjax/$userSap'));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+
+      var response = await http.post(
+          Uri.parse(
+            '${ApiConstant.baseUrlCesar}/getMemos/$userSap',
+          ),
+          headers: {
+            'Authorization': 'Bearer ${accesTocken}',
+          });
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
@@ -240,7 +267,7 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
       ]
     });
     print("Body: $jsonBody");
-    print("URL: ${ApiConstant.baseUrlCesar}/cambiarPassword");
+    print("URL: ${ApiConstant.baseUrlCesar}/sendToken");
 
     try {
       final response = await http.post(
@@ -381,12 +408,13 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
       // Realizar la solicitud HTTP GET
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
+      // var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
       var response = await http.post(
-          Uri.parse('${ApiConstant.baseUrlCesar}/checkActualizaciones/'),
-          headers: {
-            'Authorization': 'Bearer ${accesTocken}',
-          });
+        Uri.parse('${ApiConstant.baseUrlCesar}/mostrarVersiones'),
+        // headers: {
+        //   'Authorization': 'Bearer ${accesTocken}',
+        // }
+      );
 
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
