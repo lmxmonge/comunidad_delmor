@@ -1,6 +1,7 @@
 import 'package:comunidad_delmor/app/data/models/datos_laborales_model.dart';
 import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
+import 'package:comunidad_delmor/utils/mediaQueryCustom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,15 +20,8 @@ class PerfilController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    isLoading(true);
 
-    fetchDatosLaborales().then((value) {
-      isLoading(false);
-
-      fetchDatosUsuario().then((value) {
-        isLoading(false);
-      });
-    });
+    fetchData();
   }
 
   Future<void> fetchDatosLaborales() async {
@@ -46,5 +40,17 @@ class PerfilController extends GetxController {
 
       print("datos:  ${datosUsuairo.value}");
     } finally {}
+  }
+
+  Future<void> fetchData() async {
+    isLoading(true);
+
+    fetchDatosLaborales().then((value) {
+      isLoading(false);
+
+      fetchDatosUsuario().then((value) {
+        isLoading(false);
+      });
+    });
   }
 }

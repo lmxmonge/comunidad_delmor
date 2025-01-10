@@ -5,18 +5,23 @@ import 'dart:io';
 import 'package:comunidad_delmor/app/data/models/datos_usuario_model.dart';
 import 'package:comunidad_delmor/app/data/models/quejas_sugerencias_model.dart';
 import 'package:comunidad_delmor/utils/constantes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect.dart' as getConnect;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../presentation/views/boletin_informativo/boletin_informativo.dart';
 import '../api/api_constant.dart';
 import 'package:intl/intl.dart';
 
-import '../models/api_response.dart';
+import '../api/api_response.dart';
+import '../models/boletin_informativo_model.dart';
 
 abstract class ApiService {
+  Future<bool> checkInternetConnection();
+
   Future<dynamic> fetchDatosDaborales({required String userSap});
 
   Future<dynamic> fetchDatosUsuario({required String userSap});
@@ -172,6 +177,9 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchBoletinesInformativos() async {
     try {
+      var checkInternet = await checkInternetConnection();
+      if (!checkInternet) throw ("No se pudo obtener boletines. Verifique su conexión de internet");
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
 
@@ -183,21 +191,27 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
             'Authorization': 'Bearer ${accesTocken}',
           });
 
-      if (response.statusCode == 200) {
-        var jsonData = jsonDecode(response.body);
-        print(" Boletines: " + response.body);
-        return jsonData;
-      } else {
-        return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
+      if (response.statusCode != 200) {
+        throw HttpException(
+            'Error: ${response.statusCode} - ${response.reasonPhrase}');
       }
+
+      var jsonData = jsonDecode(response.body);
+      print(" Boletines: " + response.body);
+      return jsonData;
     } catch (e) {
-      return 'Error: $e';
+      throw Exception(e);
     }
   }
 
   @override
   Future fetchCirculares({required String userSap}) async {
     try {
+
+      var checkInternet = await checkInternetConnection();
+      if (!checkInternet) throw ("No se pudo obtener circulares. Verifique su conexión de internet");
+
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
 
@@ -216,13 +230,16 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
         return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
       }
     } catch (e) {
-      return 'Error: $e';
+      throw Exception(e);
     }
   }
 
   @override
   Future fetchMemorandums({required String userSap}) async {
     try {
+      var checkInternet = await checkInternetConnection();
+      if (!checkInternet) throw ("No se pudo obtener memorandums. Verifique su conexión de internet");
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
 
@@ -241,7 +258,7 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
         return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
       }
     } catch (e) {
-      return 'Error: $e';
+    throw Exception(e);
     }
   }
 
@@ -424,6 +441,20 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
       }
     } catch (e) {
       return 'Error: $e';
+    }
+  }
+
+  @override
+  Future<bool> checkInternetConnection() async {
+    try {
+      if(kIsWeb)
+        return true;
+
+      var response = await http.head(Uri.parse('https://www.google.com'));
+
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
     }
   }
 }

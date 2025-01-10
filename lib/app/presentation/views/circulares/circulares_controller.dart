@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../global_widgets/custom_dialog/custom_dialog.dart';
 import '../../routes/app_pages.dart';
 import '../pdf/pdf_web_view.dart';
 
@@ -21,6 +22,8 @@ class CircularesController extends GetxController {
   RxList<CircularesModel> circulares = <CircularesModel>[].obs;
 
   var remotePDFpath = "".obs;
+
+  var sinResultados = "".obs;
 
   @override
   void onInit() {
@@ -81,16 +84,28 @@ class CircularesController extends GetxController {
     try {
       isLoading(true);
 
-      circulares.value = await respository.fetchCirculares().then((value) {
-        isLoading(false);
-        return value;
-      });
+      var value = await respository.fetchCirculares();
+
+      if(value.data is List<CircularesModel>){
+        circulares.value = value.data;}
+      else {
+        sinResultados.value = value.message;
+        circulares.value = [];
+      }
 
     } catch (e) {
-      isLoading(false);
-      var mensaje = e.toString().split(':').last.trim();
-      dialogo(mensaje, true, tittle: 'Advertencia');
       print(e);
+      var mensaje = e.toString().split(':').last.trim();
+
+      if (mensaje.contains("Verifique su conexión de internet")) {
+        CustomDialog.dialogoSinConexionAInternet(
+            mensaje: mensaje, titulo: "Advertencia");
+      } else {
+        CustomDialog.dialogo(mensaje, true, titulo: 'Advertencia');
+      }
+    }
+    finally {
+      isLoading(false);
     }
   }
 

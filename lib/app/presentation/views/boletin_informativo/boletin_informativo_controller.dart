@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:comunidad_delmor/app/data/models/boletin_informativo_model.dart';
 import 'package:comunidad_delmor/app/data/repositories/api_repository.dart';
+import 'package:comunidad_delmor/app/presentation/global_widgets/custom_dialog/custom_dialog.dart';
 import 'package:comunidad_delmor/app/presentation/views/pdf/pdf_web_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class BoletinInformativoController extends GetxController {
   BoletinInformativoController(this.respository);
 
   var isLoading = false.obs;
+  var sinResultados = "".obs;
 
   RxList<BoletinIformativoModel> boletines = <BoletinIformativoModel>[].obs;
 
@@ -39,7 +41,8 @@ class BoletinInformativoController extends GetxController {
       isLoading(false);
       return;
     } catch (e) {
-      dialogo('Error al procesar el archivo!', true, titulo: 'Error');
+      CustomDialog.dialogo('Error al procesar el archivo!', true,
+          titulo: 'Error');
       isLoading(false);
     }
   }
@@ -78,42 +81,29 @@ class BoletinInformativoController extends GetxController {
   Future<void> fetchBoletines() async {
     try {
       isLoading(true);
+      var value = await respository.fetchBoletinesInformativos();
 
-      boletines.value =
-          await respository.fetchBoletinesInformativos().then((value) {
-        isLoading(false);
-        return value;
-      });
+      if (value.data is List<BoletinIformativoModel>) {
+        boletines.value = value.data;
+      } else {
+        sinResultados.value = value.message;
+        boletines.value = [];
+      }
     } catch (e) {
-      isLoading(false);
-      var mensaje = e.toString().split(':').last.trim();
-      dialogo(mensaje, true, titulo: 'Advertencia');
-
       print(e);
+      var mensaje = e.toString().split(':').last.trim();
+
+      if (mensaje.contains("Verifique su conexión de internet")) {
+        CustomDialog.dialogoSinConexionAInternet(
+            mensaje: mensaje, titulo: "Advertencia");
+      } else {
+       CustomDialog.dialogo(mensaje, true, titulo: 'Advertencia');
+      }
+    } finally {
+      isLoading(false);
     }
   }
 
   void iniciarPdf() {}
 
-  void dialogo(String s, bool error, {required String titulo}) {
-    Get.generalDialog(pageBuilder: (context, animation, secondaryAnimation) {
-      return AlertDialog(
-        icon: Icon(
-          error ? Icons.error : Icons.check,
-          color: error ? Colors.red : Colors.green,
-          size: 48.0,
-        ),
-        title: Text(titulo),
-        content: Text(s),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: const Text('Aceptar'),
-          )
-        ],
-      );
-    });
-  }
 }

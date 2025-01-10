@@ -1,4 +1,5 @@
 import 'package:comunidad_delmor/app/data/models/actualizacion_model.dart';
+import 'package:comunidad_delmor/app/data/api/api_response.dart';
 import 'package:comunidad_delmor/app/data/models/boletin_informativo_model.dart';
 import 'package:comunidad_delmor/app/data/models/circulares_model.dart';
 import 'package:comunidad_delmor/app/data/models/contrasenia_model.dart';
@@ -78,58 +79,98 @@ class ApiRespository {
     return respuesta;
   }
 
-  Future<List<BoletinIformativoModel>> fetchBoletinesInformativos() async {
-    final jsonData = await _apiService.fetchBoletinesInformativos();
+  Future<ApiResponse> fetchBoletinesInformativos() async {
+    try {
+      final jsonData = await _apiService.fetchBoletinesInformativos();
 
-    if (jsonData is Map<String, dynamic> && jsonData.containsKey('boletines')) {
-      final circularesList = jsonData['boletines'];
-      if (circularesList is List) {
-        return circularesList
-            .map((e) => BoletinIformativoModel.fromJson(e))
-            .toList();
-      } else {
-        throw Exception("Error: 'boletines' no es una lista");
+      // // Validar respuesta y transformarla
+      if (jsonData['status'] == "error") {
+        return ApiResponse(
+          status: jsonData['status'],
+          message: jsonData['message'] ?? 'Error desconocido',
+        );
       }
-    } else {
-      throw Exception("Error al parsear los boletines informativos");
+
+      if (!jsonData.containsKey('boletines') ||
+          jsonData['boletines'] is! List) {
+        throw Exception("Error al parsear los boletines");
+      }
+
+      // Parsear y retornar boletines
+      final boletines = (jsonData['boletines'] as List)
+          .map((e) => BoletinIformativoModel.fromJson(e))
+          .toList();
+
+      ApiResponse apiResponse = ApiResponse(status: 'susses', message: 'OK');
+      apiResponse.setData(boletines);
+      return apiResponse;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<List<CircularesModel>> fetchCirculares() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<ApiResponse> fetchCirculares() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final jsonData = await _apiService.fetchCirculares(
-        userSap: prefs.getString(Constantes.codigoSap) ?? '');
+      final jsonData = await _apiService.fetchCirculares(
+          userSap: prefs.getString(Constantes.codigoSap) ?? '');
 
-    if (jsonData is Map<String, dynamic> &&
-        jsonData.containsKey('circulares')) {
-      final circularesList = jsonData['circulares'];
-      if (circularesList is List) {
-        return circularesList.map((e) => CircularesModel.fromJson(e)).toList();
-      } else {
-        throw Exception("Error: 'circulares' no es una lista");
+      if (jsonData['status'] == "error") {
+        return ApiResponse(
+          status: jsonData['status'],
+          message: jsonData['message'] ?? 'Error desconocido',
+        );
       }
-    } else {
-      throw Exception("Error al parsear los circulares");
+
+      if (!jsonData.containsKey('circulares') ||
+          jsonData['circulares'] is! List) {
+        throw Exception("Error al parsear circulares");
+      }
+
+      // Parsear y retornar boletines
+      final circulares = (jsonData['circulares'] as List)
+          .map((e) => CircularesModel.fromJson(e))
+          .toList();
+
+      ApiResponse apiResponse = ApiResponse(status: 'susses', message: 'OK');
+      apiResponse.setData(circulares);
+      return apiResponse;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<List<MemorandumsModel>> fetchMemorandums() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<ApiResponse> fetchMemorandums() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final jsonData = await _apiService.fetchMemorandums(
-        userSap: prefs.getString(Constantes.codigoSap) ?? '');
+      final jsonData = await _apiService.fetchMemorandums(
+          userSap: prefs.getString(Constantes.codigoSap) ?? '');
 
-    if (jsonData is Map<String, dynamic> &&
-        jsonData.containsKey('memoramdums')) {
-      final memoList = jsonData['memoramdums'];
-      if (memoList is List) {
-        return memoList.map((e) => MemorandumsModel.fromJson(e)).toList();
-      } else {
-        throw Exception("Error: 'memorandums' no es una lista");
+      // // Validar respuesta y transformarla
+      if (jsonData['status'] == "error") {
+        return ApiResponse(
+          status: jsonData['status'],
+          message: jsonData['message'] ?? 'Error desconocido',
+        );
       }
-    } else {
-      throw Exception("Error al parsear memorandums");
+
+      if (!jsonData.containsKey('memoramdums') ||
+          jsonData['memoramdums'] is! List) {
+        throw Exception("Error al parsear memoramdums");
+      }
+
+      // Parsear y retornar boletines
+      final boletines = (jsonData['memoramdums'] as List)
+          .map((e) => BoletinIformativoModel.fromJson(e))
+          .toList();
+
+      ApiResponse apiResponse = ApiResponse(status: 'susses', message: 'OK');
+      apiResponse.setData(boletines);
+      return apiResponse;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:comunidad_delmor/utils/iconos.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../global_widgets/sin_resultados/sin_resultados.dart';
 import 'circulares_controller.dart';
 
 class Circulares extends StatelessWidget {
@@ -54,7 +55,17 @@ class Circulares extends StatelessWidget {
                       },
                     ),
                   )
-                : Container(),
+                : RefreshIndicator(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+
+              child: SinResultados(
+                cuerpo: controller.sinResultados.value,
+              ),
+            ),
+            onRefresh: () {
+              return controller.fetchCirculares();
+            }),
       );
     });
   }

@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/models/memorandums_model.dart';
+import '../../global_widgets/custom_dialog/custom_dialog.dart';
 import '../../routes/app_pages.dart';
 import '../pdf/pdf_web_view.dart';
 
@@ -22,6 +23,8 @@ class MemorandumsController extends GetxController {
   RxList<MemorandumsModel> memorandums = <MemorandumsModel>[].obs;
 
   var remotePDFpath = "".obs;
+
+  var sinResultados = "".obs;
 
   @override
   void onInit() {
@@ -78,16 +81,26 @@ class MemorandumsController extends GetxController {
   Future<void> fetchMemorandums() async {
     try {
       isLoading(true);
-      memorandums.value = await respository.fetchMemorandums().then((value) {
-        isLoading(false);
-        return value;
-      });
+      var value = await respository.fetchMemorandums();
 
+      if (value.data is List<MemorandumsModel>) {
+        memorandums.value = value.data;
+      } else {
+        sinResultados.value = value.message;
+        memorandums.value = [];
+      }
     } catch (e) {
-      isLoading(false);
-      var mensaje = e.toString().split(':').last.trim();
-      dialogo(mensaje, true, titulo: 'Avertencia');
       print(e);
+      var mensaje = e.toString().split(':').last.trim();
+
+      if (mensaje.contains("Verifique su conexión de internet")) {
+        CustomDialog.dialogoSinConexionAInternet(
+            mensaje: mensaje, titulo: "Advertencia");
+      } else {
+        CustomDialog.dialogo(mensaje, true, titulo: 'Advertencia');
+      }
+    } finally {
+      isLoading(false);
     }
   }
 

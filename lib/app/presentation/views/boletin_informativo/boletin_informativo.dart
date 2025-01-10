@@ -1,4 +1,5 @@
 import 'package:comunidad_delmor/app/data/models/boletin_informativo_model.dart';
+import 'package:comunidad_delmor/app/presentation/global_widgets/sin_resultados/sin_resultados.dart';
 import 'package:comunidad_delmor/utils/iconos.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,6 @@ class BoletinInformativo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Obx(() {
       return Container(
         decoration: BoxDecoration(),
@@ -61,7 +61,17 @@ class BoletinInformativo extends StatelessWidget {
                       },
                     ),
                   )
-                : Container(),
+                : RefreshIndicator(
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+
+                      child: SinResultados(
+                        cuerpo: controller.sinResultados.value,
+                      ),
+                    ),
+                    onRefresh: () {
+                      return controller.fetchBoletines();
+                    }),
       );
     });
   }

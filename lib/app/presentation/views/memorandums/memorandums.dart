@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/models/memorandums_model.dart';
+import '../../global_widgets/sin_resultados/sin_resultados.dart';
 import 'memorandums_controller.dart';
 
 class Memorandums extends StatelessWidget {
@@ -18,6 +19,8 @@ class Memorandums extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     // Obtén el controlador usando Get.find() para que sea inyectado previamente por MemorandumsBinding
 
     // return Center(child: const Text('No se encontraron datos'));
@@ -60,7 +63,16 @@ class Memorandums extends StatelessWidget {
                       },
                     ),
                 )
-                : Container(),
+                : RefreshIndicator(
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: SinResultados(
+                cuerpo: controller.sinResultados.value,
+              ),
+            ),
+            onRefresh: () {
+              return controller.fetchMemorandums();
+            }),
       );
     });
   }
