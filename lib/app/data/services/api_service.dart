@@ -57,8 +57,8 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
       var response = await http.post(
           Uri.parse('${ApiConstant.baseUrlCesar}/datosLaborales/$userSap'),
-          headers: {
-            'Authorization': 'Bearer ${accesTocken}',
+          headers: { 'Authorization': 'Bearer ${accesTocken}',
+
           });
 
       if (response.statusCode == 200) {
@@ -178,7 +178,8 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   Future fetchBoletinesInformativos() async {
     try {
       var checkInternet = await checkInternetConnection();
-      if (!checkInternet) throw ("No se pudo obtener boletines. Verifique su conexión de internet");
+      if (!checkInternet)
+        throw ("No se pudo obtener boletines. Verifique su conexión de internet");
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
@@ -207,10 +208,9 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future fetchCirculares({required String userSap}) async {
     try {
-
       var checkInternet = await checkInternetConnection();
-      if (!checkInternet) throw ("No se pudo obtener circulares. Verifique su conexión de internet");
-
+      if (!checkInternet)
+        throw ("No se pudo obtener circulares. Verifique su conexión de internet");
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
@@ -238,7 +238,8 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   Future fetchMemorandums({required String userSap}) async {
     try {
       var checkInternet = await checkInternetConnection();
-      if (!checkInternet) throw ("No se pudo obtener memorandums. Verifique su conexión de internet");
+      if (!checkInternet)
+        throw ("No se pudo obtener memorandums. Verifique su conexión de internet");
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var accesTocken = (prefs.getString(Constantes.accesTocken) ?? '');
@@ -258,7 +259,7 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
         return 'Error: ${response.statusCode} - ${response.reasonPhrase}';
       }
     } catch (e) {
-    throw Exception(e);
+      throw Exception(e);
     }
   }
 
@@ -447,8 +448,7 @@ class ApiServiceImpl extends getConnect.GetConnect implements ApiService {
   @override
   Future<bool> checkInternetConnection() async {
     try {
-      if(kIsWeb)
-        return true;
+      if (kIsWeb) return true;
 
       var response = await http.head(Uri.parse('https://www.google.com'));
 

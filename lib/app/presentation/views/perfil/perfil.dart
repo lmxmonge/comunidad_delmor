@@ -117,19 +117,23 @@ class Perfil extends StatelessWidget {
           ),
         ),
 
-        bodyItem(
-            context: context,
-            controller,
-            iconPath: Iconos.seguroSocial,
-            title: "INSS",
-            content: controller.datosUsuairo.value?.inss.toString() ?? ''),
-
-        bodyItem(
+        bodyItem2(
             context: context,
             controller,
             iconPath: Iconos.cedula,
             title: "Cédula",
-            content: controller.datosUsuairo.value?.cedula ?? ''),
+            content: controller.datosUsuairo.value?.cedula ?? '',
+
+            iconPath2: Iconos.seguroSocial,
+            title2: "INSS",
+            content2: controller.datosUsuairo.value?.inss.toString() ?? ''),
+
+        // bodyItem(
+        //     context: context,
+        //     controller,
+        //     iconPath: Iconos.cedula,
+        //     title: "Cédula",
+        //     content: controller.datosUsuairo.value?.cedula ?? ''),
 
         bodyItem2(controller,
             context: context,
@@ -157,23 +161,21 @@ class Perfil extends StatelessWidget {
             ),
           ),
         ),
-        bodyItem(
+        bodyItem2(
             context: context,
             controller,
             iconPath: Iconos.vacaciones,
             title: "Vacaciones",
             content:
-                controller.datosLaborales.value?.vacacionesDisponibles ?? ''),
-        bodyItem(
-          context: context,
-          controller,
-          iconPath: Iconos.salario,
-          title: "Salario",
-          content: controller.datosLaborales.value?.salario != null
-              ? double.parse(controller.datosLaborales.value!.salario)
-                  .toStringAsFixed(2)
-              : '',
-        ), //
+                controller.datosLaborales.value?.vacacionesDisponibles ?? '',
+
+            iconPath2: Iconos.salario,
+            title2: "Salario",
+            content2: controller.datosLaborales.value?.salario != null
+                ? double.parse(controller.datosLaborales.value!.salario)
+                .toStringAsFixed(2)
+                : ''
+        ),
         const SizedBox(
           height: 10,
         )
